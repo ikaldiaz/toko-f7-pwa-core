@@ -1,14 +1,20 @@
 {
   "name": "mbgae-store",
+  "author": "Laksamana Muhammad Haikal Diaz Alejandro",
   "private": false,
-  "version": "1.0.0",
-  "description": "Mbgae Store",
-  "repository": "",
+  "version": "0.0.2",
+  "description": "Demonstration Framework7 Core PWA with Supabase as Database",
   "license": "MIT",
+  "repository": "https://github.com/ikaldiaz/toko-f7-pwa-core",
+  "bugs": {
+    "url": "https://github.com/framework7io/framework7/issues"
+  },
+  "homepage": "https://mbgae.site/",
   "scripts": {
     "start": "npm run dev",
     "dev": "cross-env NODE_ENV=development vite",
-    "build": "cross-env NODE_ENV=production vite build && npx workbox generateSW workbox-config.js",
+    "build": "cross-env NODE_ENV=production vite build && npx workbox generateSW workbox-config.js && npm version patch",
+    "preview": "cross-env NODE_ENV=production vite preview --port 8080  && npx workbox generateSW workbox-config.js",
     "postinstall": "cpy --flat ./node_modules/framework7-icons/fonts/*.* ./src/fonts/ && cpy --flat ./node_modules/material-icons/iconfont/*.* ./src/fonts/"
   },
   "browserslist": [
