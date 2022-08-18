@@ -5,15 +5,76 @@ import FormPage from '../pages/form.f7';
 import CatalogPage from '../pages/catalog.f7';
 import ProductPage from '../pages/product.f7';
 import SettingsPage from '../pages/settings.f7';
+import CartPage from '../pages/cart.f7';
+
+import PanelRight from '../pages/panel-right.f7';
+
+import ScreenLogin from '../pages/screen-login.f7';
+import ScreenRegister from '../pages/screen-register.f7';
 
 import DynamicRoutePage from '../pages/dynamic-route.f7';
 import RequestAndLoad from '../pages/request-and-load.f7';
 import NotFoundPage from '../pages/404.f7';
 
+import { supabase, session } from '../js/supabase';
+
+
+function checkAuth({ to, from, resolve, reject }) {
+  console.log(session);
+  // onAuthStateChanged(auth, user => {
+    console.log('Check Auth');
+    if (session) {reject()} else {resolve()}
+  // });
+}
+
 var routes = [
   {
     path: '/',
+    // id: 'tab1',
     component: HomePage,
+  },
+  {
+    path: '/login/',
+    // check if the user is logged in
+    beforeEnter: checkAuth,
+    component: ScreenLogin,
+    options:{
+      clearPreviousHistory :true
+    }
+  },
+  {
+    path: '/register/',
+    // check if the user is logged in
+    beforeEnter: checkAuth,
+    component: ScreenRegister,
+    options:{
+      clearPreviousHistory :true
+    }
+  }, 
+  {
+    path: '/panel-right/',
+    name:'panel-right',
+    //browser url will look like "http://my-webapp.com/#!/quad-eq.html"
+    //https://www.domain.comk/#!/quad-eq/
+    panel: {
+    async: function ({ router, to, resolve }) {
+      // App instance
+      var app = router.app;
+      // Show ProgresBar
+      app.progressbar.show('multi');
+      // Simulate Ajax Request
+      setTimeout(function () {
+        // Hide ProgressBar
+        app.progressbar.hide(); //hide
+        // Resolve route to load page
+        resolve(
+          {
+            component: PanelRight,
+          }
+        );
+      }, 1800);
+    },
+    }
   },
   {
     path: '/about/',
@@ -25,6 +86,7 @@ var routes = [
   },
   {
     path: '/catalog/',
+    // id: 'tab2',
     component: CatalogPage,
   },
   {
@@ -33,7 +95,28 @@ var routes = [
   },
   {
     path: '/settings/',
-    component: SettingsPage,
+    component: SettingsPage
+  },
+  {
+    path: '/cart/',
+    // id: 'tab3',,
+    async: function ({ router, to, resolve }) {
+      // App instance
+      var app = router.app;
+      // Show Preloader
+      app.progressbar.show('multi');
+      // Simulate Ajax Request
+      setTimeout(function () {
+        // Hide Preloader
+        app.progressbar.hide();
+        // Resolve route to load page
+        resolve(
+          {
+            component: CartPage,
+          }
+        );
+      }, 1000);
+    },
   },
 
   {
@@ -47,7 +130,7 @@ var routes = [
       var app = router.app;
 
       // Show Preloader
-      app.preloader.show();
+      app.progressbar.show('multi');
 
       // User ID from request
       var userId = to.params.userId;
@@ -71,7 +154,7 @@ var routes = [
           ]
         };
         // Hide Preloader
-        app.preloader.hide();
+        app.progressbar.hide();
 
         // Resolve route to load page
         resolve(

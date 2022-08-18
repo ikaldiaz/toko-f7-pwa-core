@@ -4,6 +4,9 @@
   --f7-theme-color-rgb: 0, 19, 111;
   --f7-theme-color-shade: #000c46;
   --f7-theme-color-tint: #001a98;
+  // --f7-tabbar-link-active-border-color: red;
+  
+  // --f7-tabbar-link-active-border-color: var(--f7-theme-color);
 }
 
 /* Invert navigation bars to fill style */
@@ -21,6 +24,9 @@
   --f7-tabbar-link-inactive-color: rgba(255,255,255,0.54);
   --f7-sheet-border-color: transparent;
   --f7-tabbar-link-active-border-color: #fff;
+
+  //custom
+  --f7-tabbar-link-active-border-color: transparent;
 }
 .appbar,
 .navbar,
@@ -54,3 +60,68 @@
 }
 
 /* Your app custom styles here */
+body {
+  font-family: "Trebuchet MS", sans-serif;
+}
+
+
+
+.container {
+  width: 180px;
+  height: 180px;
+  display: block;
+  margin: 0 auto;
+  }
+
+.outer {
+  width: 100% !important;
+  z-index:11;
+  height: 100% !important;
+  max-width: 180px !important; /* any size */
+  max-height: 180px !important; /* any size */
+  margin: auto;
+  background-color: #06039c;
+  border-radius: 100%;
+  position: relative;
+  background-image: var(--background); 
+  background-image: var(--bg-img);
+  background-repeat: no-repeat;
+  background-position: center center;
+	background-size: 100%;
+  }
+  
+.inner {
+  z-index:10;
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.inner:hover {
+  background-color: #5555ff;
+}
+
+.inner:after, .inner:before {
+  content: "";
+  background: #06039c;
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  bottom: 0;
+  border-radius: 50% / 22%;
+  }
+
+.inner:before {
+  transform: rotate(-90deg); /* vendor prefixes omitted due to brevity */
+}
+
+#edit-profile-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

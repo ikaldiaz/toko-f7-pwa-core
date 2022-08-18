@@ -19,16 +19,27 @@ const store = createStore({
         title: 'Apple iPhone X',
         description: 'Expedita sequi perferendis quod illum pariatur aliquam, alias laboriosam! Vero blanditiis placeat, mollitia necessitatibus reprehenderit. Labore dolores amet quos, accusamus earum asperiores officiis assumenda optio architecto quia neque, quae eum.'
       },
-    ]
+    ],
+    client: {
+      email: 'john@doe.com',
+      photoUrl: 'icons/favicon.png',
+    }
   },
   getters: {
     products({ state }) {
       return state.products;
-    }
+    },
+    client({ state }) {
+      return state.client;
+    },
   },
   actions: {
     addProduct({ state }, product) {
       state.products = [...state.products, product];
+    },
+    //not reactive
+    setClient({ state }, client) {
+      state.client = client;
     },
   },
 })

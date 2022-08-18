@@ -2,22 +2,6 @@
 <template>
   <div id="app">
 
-    <!-- Left panel with cover effect-->
-    <div class="panel panel-left panel-cover dark panel-init">
-      <div class="view">
-        <div class="page">
-          <div class="navbar">
-            <div class="navbar-bg"></div>
-            <div class="navbar-inner">
-              <div class="title">Left Panel</div>
-            </div>
-          </div>
-          <div class="page-content">
-            <div class="block">Left panel content goes here</div>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- Right panel with reveal effect-->
     <div class="panel panel-right panel-reveal dark">
       <div class="view">
@@ -35,43 +19,35 @@
       </div>
     </div>
 
-    <!-- Views/Tabs container -->
-    <div class="views tabs safe-areas">
-      <!-- Tabbar for switching views-tabs -->
-      <div class="toolbar toolbar-bottom tabbar-labels">
-        <div class="toolbar-inner">
-          <a href="#view-home" class="tab-link tab-link-active">
-            <i class="icon f7-icons if-not-md">house_fill</i>
-            <i class="icon material-icons if-md">home</i>
-            <span class="tabbar-label">Home</span>
-          </a>
-          <a href="#view-catalog" class="tab-link">
-            <i class="icon f7-icons if-not-md">square_list_fill</i>
-            <i class="icon material-icons if-md">view_list</i>
-            <span class="tabbar-label">Catalog</span>
-          </a>
-          <a href="#view-settings" class="tab-link">
-            <i class="icon f7-icons if-not-md">gear</i>
-            <i class="icon material-icons if-md">settings</i>
-            <span class="tabbar-label">Settings</span>
-          </a>
-        </div>
-      </div>
+    <!-- Your main view, should have "view-main" class -->
+    <div class="view view-main view-init safe-areas" data-url="/">
 
-      <!-- Your main view/tab, should have "view-main" class. It also has "tab-active" class -->
-      <div id="view-home" class="view view-main view-init tab tab-active" data-url="/">
-        <!-- Home page will be loaded here dynamically from / route -->
+    <!-- Tabbar for switching views-tabs -->
+    <div class="toolbar toolbar-bottom tabbar-labels">
+      <div class="toolbar-inner">
+        <a href="/" class="tab-link" data-route-tab-id="tab1" id="toolbar-home">
+          <i class="icon f7-icons if-not-md">house_fill</i>
+          <i class="icon material-icons if-md">home</i>
+          <span class="tabbar-label">Home</span>
+        </a>
+        <a href="/catalog/" class="tab-link" data-route-tab-id="tab2" id="toolbar-catalog">
+          <i class="icon f7-icons if-not-md">square_list_fill</i>
+          <i class="icon material-icons if-md">view_list</i>
+          <span class="tabbar-label">Catalog</span>
+        </a>
+        <a href="/settings/" class="tab-link" data-route-tab-id="tab3" id="toolbar-settings">
+          <i class="icon f7-icons if-not-md">gear</i>
+          <i class="icon material-icons if-md">settings</i>
+          <span class="tabbar-label">Settings</span>
+        </a>
+        <a href="/cart/" class="tab-link" data-route-tab-id="tab4" id="toolbar-cart">
+          <i class="icon f7-icons if-not-md">shopping_cart</i>
+          <i class="icon material-icons if-md">shopping_cart</i>
+          <span class="tabbar-label">Cart</span>
+        </a>
       </div>
+    </div>
 
-      <!-- Catalog View -->
-      <div id="view-catalog" class="view view-init tab" data-name="catalog" data-url="/catalog/">
-        <!-- Catalog page will be loaded here dynamically from /catalog/ route -->
-      </div>
-
-      <!-- Settings View -->
-      <div id="view-settings" class="view view-init tab" data-name="settings" data-url="/settings/">
-        <!-- Settings page will be loaded here dynamically from /settings/ route -->
-      </div>
     </div>
 
 
@@ -142,6 +118,8 @@
   </div>
 </template>
 <script>
+  
+  import { supabase } from './js/supabase.js';
   export default (props, { $f7, $update }) => {
     // Login screen demo data
     let username = '';

@@ -1,0 +1,115 @@
+<template>
+    <div class="panel panel-right panel-reveal dark" data-name="panel-right">
+        <div class="view">
+            <div class="page" data-name="home">
+                <div class="navbar">
+                    <div class="navbar-bg"></div>
+                    <div class="navbar-inner">
+                        <div class="title">Menu</div>
+                    </div>
+                </div>
+                
+                <!-- Scrollable Page Content -->
+                <div class="page-content">
+    
+                <div class="block">
+                    
+                </div>
+                ${client.value.email ? $h`
+                <div class="container">
+                    ${client.value.photoUrl ? $h`
+                        <div style="--bg-img: url('${client.value.photoUrl}')" class="outer">
+                            <div class="inner">
+                                <a href="/popup-img-profile/" class="link color-yellow" id="edit-profile-img">
+                                    
+                                <i class="material-icons">edit</i>
+                                </a>
+                            </div>
+                        </div>
+                    ` : $h`
+                        <div style="--bg-img: url('assets/logo/logo-rounded.svg')" class="outer">
+                            <div class="inner">
+                                <a href="/popup-img-profile/" class="link color-yellow" id="edit-profile-img">
+                                    
+                                <i class="material-icons">edit</i>
+                                </a>
+                            </div>
+                        </div>
+                    `}
+                </div>
+                ` : $h` `}
+    
+                
+                <div class="list links-list no-chevron no-hairlines-between no-hairlines">
+                <ul>
+                    <!-- Divider -->
+                    <li class="item-divider">Divider title here</li>
+                    <!-- Another list items -->
+                    <li>
+                    <a href="#">${client.value.photoUrl ? $h `${client.value.photoUrl} `: $h` `}</a>
+                    </li>
+                    <li>
+                    <a href="#">${client.value.email ? $h `${client.value.email} `: $h` `}</a>
+                    </li>
+                    <li>
+                    <a href="#">Link Item 3</a>
+                    </li>
+                    <li>
+                    <a href="/login/" class="item-link item-content">
+                        <div class="item-media"><i class="material-icons">login</i></div>
+                        <div class="item-inner">
+                        <div class="item-title">Login</div>
+                        </div>
+                    </a>
+                    </li>
+                    <li>
+                    <a href="/register/" class="item-link item-content">
+                        <div class="item-media"><i class="material-icons">login</i></div>
+                        <div class="item-inner">
+                        <div class="item-title">Register</div>
+                        </div>
+                    </a>
+                    </li>
+                </ul>
+                </div>
+    
+    
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<style>
+p {
+    margin: 10px 0;
+}
+</style>
+<script>
+    
+import { supabase } from '../js/supabase.js';
+export default function (props, {$f7, $store, $on, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
+    const client = $store.getters.client;
+    // console.log(client.value.photoUrl);
+
+    // Lifecycle
+    $onBeforeMount(() => {
+        // const auth = auth;
+        // console.log('onBeforeMount');
+    });
+    $onMounted(() => {
+        supabase.auth.onAuthStateChange((event, session) => {
+        console.log(event, session)
+        })
+    });
+    $onBeforeUnmount(() => {
+        // console.log('onBeforeUnmount');
+        // console.log('onBeforeUnmount');
+    });
+    $onUnmounted(() => {
+        // console.log('onUnmounted');
+    });
+
+    // Return render function
+    return $render;
+    }
+</script>

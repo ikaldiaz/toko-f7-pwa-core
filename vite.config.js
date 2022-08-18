@@ -1,7 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
 import path from 'path';
 import framework7 from 'rollup-plugin-framework7';
-import { createHtmlPlugin } from 'vite-plugin-html';
 
 process.env.TARGET = process.env.TARGET || 'web';
 const isCordova = process.env.TARGET === 'cordova';
@@ -24,14 +23,6 @@ export default defineConfig(({ command, mode }) => {
   return {
     plugins: [
       framework7({ emitCss: false }),
-      createHtmlPlugin({
-        minify: false,
-        inject: {
-          data: {
-            TARGET: process.env.TARGET,
-          },
-        },
-      }),
     ],
   root: SRC_DIR,
   base: '',

@@ -1,27 +1,27 @@
 <template>
   <div class="page" data-name="home">
     <!-- Top Navbar -->
-    <div class="navbar navbar-large">
+    <div class="navbar">
       <div class="navbar-bg"></div>
       <div class="navbar-inner">
         <div class="left">
-          <a href="#" class="link icon-only panel-open" data-panel="left">
-            <i class="icon f7-icons if-not-md">menu</i>
-            <i class="icon material-icons if-md">menu</i>
-          </a>
+          <img data-src="icons/favicon.png" style="width: 45px;" class="lazy lazy-fade-in demo-lazy" />
         </div>
-        <div class="title sliding">Mbgae Store</div>
+        <div class="title">Mbgae Store</div>
         <div class="right">
-          <a href="#" class="link icon-only panel-open" data-panel="right">
+          <a href="#" class="link icon-only">
+            <i id="conn-status" class="icon f7-icons if-not-md">wifi</i>
+            <i id="conn-status-md" class="icon material-icons if-md">wifi</i>
+          </a>
+          <a href="/panel-right/" class="link icon-only">
             <i class="icon f7-icons if-not-md">menu</i>
             <i class="icon material-icons if-md">menu</i>
           </a>
-        </div>
-        <div class="title-large">
-          <div class="title-large-text">Mbgae Store</div>
         </div>
       </div>
     </div>
+
+    
 
     <!-- Scrollable page content-->
     <div class="page-content">
@@ -31,8 +31,16 @@
         <p>Each tab/view may have different layout, different navbar type (dynamic, fixed or static) or without navbar like this tab.</p>
       </div>
       <div class="block-title">Navigation</div>
+      
       <div class="list">
         <ul>
+          <li>
+            <a href="/login/" class="item-content item-link">
+              <div class="item-inner">
+                <div class="item-title">Login</div>
+              </div>
+            </a>
+          </li>
           <li>
             <a href="/about/" class="item-content item-link">
               <div class="item-inner">
@@ -62,18 +70,6 @@
         </div>
       </div>
 
-      <div class="block-title">Panels</div>
-      <div class="block block-strong">
-        <div class="row">
-          <div class="col-50">
-            <a href="#" class="button button-raised button-fill panel-open" data-panel="left">Left Panel</a>
-          </div>
-          <div class="col-50">
-            <a href="#" class="button button-raised button-fill panel-open" data-panel="right">Right Panel</a>
-          </div>
-        </div>
-      </div>
-
       <div class="list links-list">
         <ul>
           <li>
@@ -91,7 +87,17 @@
   </div>
 </template>
 <script>
-export default () => {
+  
+import { supabase} from '../js/supabase.js';
+export default function (props, {$f7, $store, $on, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
+  const sp = supabase;
+  
+  $onMounted(() => {
+    console.log('onMount');
+    sp.auth.onAuthStateChange((event, session) => {
+    console.log(event, session)
+    })
+  });
   return $render;
 }
 </script>
