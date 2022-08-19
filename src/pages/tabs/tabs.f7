@@ -1,0 +1,73 @@
+<template>
+    <div class="page">
+        <!-- Top Navbar -->
+        <div class="navbar">
+          <div class="navbar-bg"></div>
+          <div class="navbar-inner">
+            <div class="left">
+              <img data-src="icons/favicon.png" style="width: 45px;" class="lazy lazy-fade-in demo-lazy" />
+            </div>
+            <div class="title">Mbgae Store</div>
+            <div class="right">
+              <a href="#" class="link icon-only">
+                <i id="conn-status" class="icon f7-icons if-not-md">wifi</i>
+                <i id="conn-status-md" class="icon material-icons if-md">wifi</i>
+              </a>
+              <a href="/panel-right/" class="link icon-only">
+                <i class="icon f7-icons if-not-md">menu</i>
+                <i class="icon material-icons if-md">menu</i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="toolbar toolbar-bottom tabbar-labels">
+            <div class="toolbar-inner">
+                <a href="/" class="tab-link tab-link-1" data-route-tab-id="tab1">
+                <i class="icon f7-icons if-not-md">house_fill</i>
+                <i class="icon material-icons if-md">home</i>
+                <span class="tabbar-label">Home</span>
+                </a>
+                <a href="/catalog/" class="tab-link tab-link-2" data-route-tab-id="tab2">
+                <i class="icon f7-icons if-not-md">square_list_fill</i>
+                <i class="icon material-icons if-md">view_list</i>
+                <span class="tabbar-label">Catalog</span>
+                </a>
+                <a href="/settings/" class="tab-link tab-link-3" data-route-tab-id="tab3">
+                <i class="icon f7-icons if-not-md">gear</i>
+                <i class="icon material-icons if-md">settings</i>
+                <span class="tabbar-label">Settings</span>
+                </a>
+                <a href="/cart/" class="tab-link tab-link-4" data-route-tab-id="tab4">
+                <i class="icon f7-icons if-not-md">shopping_cart</i>
+                <i class="icon material-icons if-md">shopping_cart</i>
+                <span class="tabbar-label">Cart</span>
+                </a>
+            </div>
+        </div>
+        <!-- <div class="toolbar tabbar toolbar-bottom"> -->
+            <!-- <div class="toolbar-inner"> -->
+            <!-- additional "data-route-tab-id" must match to tab's ID in the specified routes -->
+            <!-- <a href="/" class="tab-link" data-route-tab-id="tab-1">Tab 1</a> -->
+            <!-- <a href="/tab-2/" class="tab-link" data-route-tab-id="tab-2">Tab 2</a> -->
+            <!-- <a href="/tab-3/" class="tab-link" data-route-tab-id="tab-3">Tab 3</a> -->
+            <!-- </div> -->
+        <!-- </div> -->
+        <!-- Additional "tabs-routable" is required on tabs -->
+        <div class="tabs tabs-routable">
+            <div class="tab page-content" id="tab-1"></div>
+            <div class="tab page-content" id="tab-2"></div>
+            <div class="tab page-content" id="tab-3"></div>
+            <div class="tab page-content" id="tab-4"></div>
+        </div>
+    </div>
+</template>
+<script>
+export default function (props, {$f7, $store, $on, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
+  
+  $onMounted(() => {
+    console.log('onMounted Tabs Page');
+  });
+
+  return $render;
+}
+</script>

@@ -1,11 +1,11 @@
 import dateFormat from 'dateformat';
-import {version as versionApp} from '../../package.json';
+import { version as versionApp } from '../../package.json';
 const now = new Date();
 // console.log('version', versionApp);
 // console.log('buildNumber',dateFormat(now, "yymmdd.HHMMss"));
 console.log('NameVersion',versionApp+'-'+dateFormat(now, "yymmdd.HHMMss"));
 
-    import { supabase, session } from '../js/supabase.js';
+import { supabase, session } from '../js/supabase.js';
 
 import $$ from 'dom7';
 import Framework7 from './framework7-custom.js';
@@ -33,15 +33,17 @@ var app = new Framework7({
   autoDarkMode:false,
   el: '#app', // App root element
   component: App, // App main component
-  id: 'com.mbgae.app.math', // App bundle ID
-  activeState:true,
+  id: 'com.mbgae.pwa.toko', // App bundle ID
+  // activeState:true,
   view: {
     // reloadPages:true,
     browserHistory: true,
     // browserHistorySeparator:'appx',
-    browserHistoryRoot :'/',
+    // browserHistoryRoot :'/',
     // browserHistoryStoreHistory: true,
-    // browserHistoryTabs:'replace',
+    unloadTabContent:true,
+    // initRouterOnTabShow:true,
+    browserHistoryTabs:'push',
   },
   toolbar: {
     // hideOnPageScroll: true,
@@ -56,14 +58,8 @@ var app = new Framework7({
   lazy: {
     placeholder:'icons/favicon.png',
     threshold: 0,
-    sequential: true,
-    on: {
-      pageInit: function () {
-        console.log('page init')
-      }
-    }
+    sequential: true
   }, 
-
   // App store
   store: store,
   // App routes
@@ -76,13 +72,25 @@ var app = new Framework7({
     init: function () {
       // console.log("init");
     },
+    tabShow:function name(params) {
+      // console.log(params)
+      // let elem = $$(params);
+      // console.log(elem[0].id);
+      // console.log($$('.toolbar.toolbar-inner#'+elem[0].id).addClass('tab-link-active'))
+      // console.log($$('.toolbar.toolbar-inner').index())
+      // var x = $$('.toolbar')
+      // console.log(x.children('.toolbar-inner').children('a').attr(''));
+    },
+    tabHide:function name(params) {
+      // console.log('tabHide',params)
+    },
     pageInit: function (page) {
       //Localization on Another Page, we have to initialised again.
       // startI18Next(getLanguageStorage);
       // console.log(page);
-      if(page.name == 'home'){
+      // if(page.name == 'home'){
         onlineIconSet(page.app.online);
-      }
+      // }
 
     },
     pageMounted:function(page){
@@ -103,9 +111,6 @@ app.on('connection', function (isOnline) {
   onlineIconSet(isOnline);
 });
 
-app.on('tabInit', function (tabEl) {
-    // console.log(tabEl)
-});
 
 
 function onlineIconSet(isOnline) {

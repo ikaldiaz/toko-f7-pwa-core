@@ -1,0 +1,55 @@
+<template>
+    <div class="tab-content">
+      <div class="list links-list">
+        <ul>
+          ${products.value.map((product) => $h`
+            <li><a href="/product/${product.id}/">${product.title}</a></li>
+          `)}
+        </ul>
+      </div>
+      ${products.value.length === 4 && $h`
+        <div class="block">
+          <button class="button button-fill" @click=${addProduct}>Add Product</Button>
+        </div>
+      `}
+    </div>
+</template>
+<!-- component styles -->
+<style>
+
+</style>
+<!-- rest of component logic -->
+<script>
+  // script must return/export component function
+  export default (props, { $, $f7, $on, $store, $onMounted }) => {
+
+    const products = $store.getters.products;
+
+    const addProduct = () => {
+      $store.dispatch('addProduct', {
+        id: '12',
+        title: 'Apple iPhone 12',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi tempora similique reiciendis, error nesciunt vero, blanditiis pariatur dolor, minima sed sapiente rerum, dolorem corrupti hic modi praesentium unde saepe perspiciatis.'
+      });
+    }
+
+    // error because the initial products on store
+    const addProductX = () => {
+      for (let i = 5; i <= 20; i++) {
+        $store.dispatch('addProduct', {
+          id: i,
+          title: 'Apple iPhone '+i,
+          description: 'Lorem '+i+' ipsum dolor sit amet, consectetur adipisicing elit. Nisi tempora similique reiciendis, error nesciunt vero, blanditiis pariatur dolor, minima sed sapiente rerum, dolorem corrupti hic modi praesentium unde saepe perspiciatis.'
+        });
+      }
+    }
+
+    $onMounted(() => {
+      $('.tab-link-4').addClass('tab-link-active')
+      console.log('onMount Tab 4');
+    });
+
+    // component function must return render function
+    return $render;
+  }
+</script>

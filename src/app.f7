@@ -20,36 +20,7 @@
     </div>
 
     <!-- Your main view, should have "view-main" class -->
-    <div class="view view-main view-init safe-areas" data-url="/">
-
-    <!-- Tabbar for switching views-tabs -->
-    <div class="toolbar toolbar-bottom tabbar-labels">
-      <div class="toolbar-inner">
-        <a href="/" class="tab-link" data-route-tab-id="tab1" id="toolbar-home">
-          <i class="icon f7-icons if-not-md">house_fill</i>
-          <i class="icon material-icons if-md">home</i>
-          <span class="tabbar-label">Home</span>
-        </a>
-        <a href="/catalog/" class="tab-link" data-route-tab-id="tab2" id="toolbar-catalog">
-          <i class="icon f7-icons if-not-md">square_list_fill</i>
-          <i class="icon material-icons if-md">view_list</i>
-          <span class="tabbar-label">Catalog</span>
-        </a>
-        <a href="/settings/" class="tab-link" data-route-tab-id="tab3" id="toolbar-settings">
-          <i class="icon f7-icons if-not-md">gear</i>
-          <i class="icon material-icons if-md">settings</i>
-          <span class="tabbar-label">Settings</span>
-        </a>
-        <a href="/cart/" class="tab-link" data-route-tab-id="tab4" id="toolbar-cart">
-          <i class="icon f7-icons if-not-md">shopping_cart</i>
-          <i class="icon material-icons if-md">shopping_cart</i>
-          <span class="tabbar-label">Cart</span>
-        </a>
-      </div>
-    </div>
-
-    </div>
-
+    <div class="view view-main view-init safe-areas" data-url="/"></div>
 
     <!-- Popup -->
     <div class="popup" id="my-popup">

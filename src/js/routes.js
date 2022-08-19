@@ -1,11 +1,4 @@
-
-import HomePage from '../pages/home.f7';
-import AboutPage from '../pages/about.f7';
-import FormPage from '../pages/form.f7';
-import CatalogPage from '../pages/catalog.f7';
 import ProductPage from '../pages/product.f7';
-import SettingsPage from '../pages/settings.f7';
-import CartPage from '../pages/cart.f7';
 
 import PanelRight from '../pages/panel-right.f7';
 
@@ -15,6 +8,13 @@ import ScreenRegister from '../pages/screen-register.f7';
 import DynamicRoutePage from '../pages/dynamic-route.f7';
 import RequestAndLoad from '../pages/request-and-load.f7';
 import NotFoundPage from '../pages/404.f7';
+
+
+import RoutableTab from '../pages/tabs/tabs.f7';
+import Tab1Page from '../pages/tabs/tab-1.f7';
+import Tab2Page from '../pages/tabs/tab-2.f7';
+import Tab3Page from '../pages/tabs/tab-3.f7';
+import Tab4Page from '../pages/tabs/tab-4.f7';
 
 import { supabase, session } from '../js/supabase';
 
@@ -28,10 +28,63 @@ function checkAuth({ to, from, resolve, reject }) {
 }
 
 var routes = [
+  // {
+  //   path: '/',
+  //   // id: 'tab1',
+  //   component: HomePage,
+  // },
   {
     path: '/',
-    // id: 'tab1',
-    component: HomePage,
+    component: RoutableTab,
+    // Pass "tabs" property to route, must be array with tab routes:
+    tabs: [
+      // First (default) tab has the same url as the page itself
+      {
+        // Tab path
+        path: '/',
+        // Tab id
+        id: 'tab-1',
+        // Component
+        component: Tab1Page
+      },
+      // Second tab
+      {
+        path: '/catalog/',
+        id: 'tab-2',
+        // Component
+        component: Tab2Page
+      },
+      // Third tab
+      {
+        path: '/settings/',
+        id: 'tab-3',
+        // Component
+        component: Tab3Page
+      },
+      // Third tab
+      {
+        path: '/cart/',
+        // Load this tab content as a component with Ajax request:
+        id: 'tab-4',
+        async: function ({ router, to, resolve }) {
+          // App instance
+          var app = router.app;
+          // Show Preloader
+          app.progressbar.show('multi');
+          // Simulate Ajax Request
+          setTimeout(function () {
+            // Hide Preloader
+            app.progressbar.hide();
+            // Resolve route to load page
+            resolve(
+              {
+                component: Tab4Page
+              },
+            );
+          }, 1000);
+        },
+      },
+    ],
   },
   {
     path: '/login/',
@@ -77,46 +130,8 @@ var routes = [
     }
   },
   {
-    path: '/about/',
-    component: AboutPage,
-  },
-  {
-    path: '/form/',
-    component: FormPage,
-  },
-  {
-    path: '/catalog/',
-    // id: 'tab2',
-    component: CatalogPage,
-  },
-  {
     path: '/product/:id/',
     component: ProductPage,
-  },
-  {
-    path: '/settings/',
-    component: SettingsPage
-  },
-  {
-    path: '/cart/',
-    // id: 'tab3',,
-    async: function ({ router, to, resolve }) {
-      // App instance
-      var app = router.app;
-      // Show Preloader
-      app.progressbar.show('multi');
-      // Simulate Ajax Request
-      setTimeout(function () {
-        // Hide Preloader
-        app.progressbar.hide();
-        // Resolve route to load page
-        resolve(
-          {
-            component: CartPage,
-          }
-        );
-      }, 1000);
-    },
   },
 
   {

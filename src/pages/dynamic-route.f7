@@ -61,7 +61,7 @@
   }
 </style>
 <script>
-  export default function (props, {$f7, $on, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
+  export default function (props, { $, $f7, $on, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
     // Component Data
     let name = 'Jimmy';
     let age = 25;

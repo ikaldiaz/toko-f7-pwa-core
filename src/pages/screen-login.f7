@@ -57,7 +57,7 @@
   </template>
   <style>
   /* Screen Login */
-  .x-login-screen{
+  /* .x-login-screen{
     position:absolute;
     top:10px;
     right:10px;
@@ -69,7 +69,7 @@
     margin-top: 30px;
     margin-left: auto;
     margin-right: auto;
-  }
+  } */
   </style>
   <script>
     import { supabase, session } from '../js/supabase.js';

@@ -1,30 +1,6 @@
 <template>
-  <div class="page" data-name="home">
-    <!-- Top Navbar -->
-    <div class="navbar">
-      <div class="navbar-bg"></div>
-      <div class="navbar-inner">
-        <div class="left">
-          <img data-src="icons/favicon.png" style="width: 45px;" class="lazy lazy-fade-in demo-lazy" />
-        </div>
-        <div class="title">Mbgae Store</div>
-        <div class="right">
-          <a href="#" class="link icon-only">
-            <i id="conn-status" class="icon f7-icons if-not-md">wifi</i>
-            <i id="conn-status-md" class="icon material-icons if-md">wifi</i>
-          </a>
-          <a href="/panel-right/" class="link icon-only">
-            <i class="icon f7-icons if-not-md">menu</i>
-            <i class="icon material-icons if-md">menu</i>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    
-
-    <!-- Scrollable page content-->
-    <div class="page-content">
+    <div class="tab-content" data-name="home">
+      <div class="block-title">Tabs 1</div>
       <div class="block block-strong">
         <p>This is an example of tabs-layout application. The main point of such tabbed layout is that each tab contains independent view with its own routing and navigation.</p>
 
@@ -91,20 +67,25 @@
         </ul>
       </div>
     </div>
-  </div>
 </template>
+<!-- component styles -->
+<!-- <style>
+  .red-link {
+    color: red;
+  }
+</style> -->
+<!-- rest of component logic -->
 <script>
-  
-import { supabase} from '../js/supabase.js';
-export default function (props, {$f7, $store, $on, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
-  const sp = supabase;
-  
-  $onMounted(() => {
-    console.log('onMount');
-    sp.auth.onAuthStateChange((event, session) => {
-    console.log(event, session)
-    })
-  });
-  return $render;
-}
+  // script must return/export component function
+  export default (props, { $, $f7, $on, $onMounted }) => {
+
+    $onMounted(() => {
+      $('.tab-link-1').removeClass('tab-link-active')
+      console.log('onMount Tab 1');
+      $('.tab-link-1').addClass('tab-link-active')
+    });
+
+    // component function must return render function
+    return $render;
+  }
 </script>
