@@ -72,24 +72,24 @@
   } */
   </style>
   <script>
-    import { supabase, session } from '../js/supabase.js';
+    import { supabase, signIn, isEmailAddress } from '../js/supabase.js';
 
-    async function signUpWithEmail(emailx, passx) {
-      const { user, session, error } = await supabase.auth.signUp({
-        email: emailx,
-        password: passx,
-      })
+    // async function signUpWithEmail(emailx, passx) {
+    //   const { user, session, error } = await supabase.auth.signUp({
+    //     email: emailx,
+    //     password: passx,
+    //   })
 
-      if(!error) {
-        console.log('success')
-        return user
-      }else{
-        console.log('error');
-        return error
-      }
-      console.log(user)
-      console.log(session)
-    }
+    //   if(!error) {
+    //     console.log('success')
+    //     return user
+    //   }else{
+    //     console.log('error');
+    //     return error
+    //   }
+    //   console.log(user)
+    //   console.log(session)
+    // }
 
 
     export default function (props, { $, $f7, $store, $f7router, $onMounted, $update }) {
@@ -100,139 +100,69 @@
       let isLoading = false;
       let isValid = false;
   
-      function isEmailAddress(arg) {
-        var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/; 
-        return arg.match(pattern) ? true : false;    
-      }
+      
   
       const updateUsername = (e) => {
         username = e.target.value;
-        
-        isEmailAddress(username) && password.length>8 ? isValid = true : isValid = false;
+        isValid = isEmailAddress(username) && password.length>8;
+        isValid ? $('#signin-button').removeClass('disabled') : $('#signin-button').addClass('disabled');
         $update();
       }
       const updatePassword = (e) => {
         password = e.target.value;
-        isEmailAddress(username) && password.length>8 ? isValid = true : isValid = false;
+        
+        isValid = isEmailAddress(username) && password.length>8;
+        isValid ? $('#signin-button').removeClass('disabled') : $('#signin-button').addClass('disabled');
         $update();
       }
   
       const client = $store.getters.client;
-  
-      const alertLoginData = () => {
-        $f7.dialog.alert('Username: ' + username + '<br/>Password: ' + password, () => {
-          $f7router.back('/');
-        });
-      }    
       
-      const signIn = () => { 
-  
-  
-        if (isEmailAddress(username) && password.length>8) {
-          isLoading = true;
-          $update();
-          // console.log(signUpWithEmail(username, password));
-          // if(signUpWithEmail(username, password)){
-          //     isLoading = false;
-          //     $update();
-          //   $f7.dialog.alert('Yohooo, ' + user.email, () => {
-          //     $f7.loginScreen.close();
-          //   });
-          // }else{
-          //     isLoading = false;
-          //     $update();
-          // }
-          signUpWithEmail(username, password)
-          .then((user) =>{
-              isLoading = false;
-              $update();
-              console.log(user);
-          })
-            .catch((error) => {
-              
-              isLoading = false;
-              $update();
-              console.log(error);
-            })
-          // signInWithEmailAndPassword(auth, username, password)
-          // .then((userCredential) => { 
-          //   // $f7.preloader.hide();
-          //   // Signed in 
-          //   const user = userCredential.user;
-          //   // console.log(user);
-          //   isLoading = false;
-          //   $update();
-          //   // ...
-          //   $f7.dialog.alert('Yohooo, ' + user.email, () => {
-          //     $f7.loginScreen.close();
-          //   });
-          // })
-          // .catch((error) => {
+
+
+      const signIn = async () => {
+        console.log(username)
+        console.log(password)
+
+
+        isLoading =true;
+        $update()
+        const { user, session, error } = await supabase.auth.signIn({
+          email: username,
+          password: password,
+        })
             
-          //   isLoading = false;
-          //   $update();
-            
-          //   const errorCode = error.code;
-          //   console.log(errorCode);
-            
-          //   var messageError = '';
-  
-          //   switch (errorCode) {
-          //     case 'auth/invalid-email':
-          //       messageError = 'Don\'t play with us, you have the wrong email'
-          //       break;
-          //     case 'auth/network-request-failed':
-          //       messageError = 'Check your connection, please. Or maybe something\'s wrong with your internet provider'
-          //       break;
-          //     case 'auth/user-not-found':
-          //       messageError = 'It\'s seem you are not registered yet'
-          //       break;
-          //     case 'auth/wrong-password':
-          //       messageError = 'Your password is completely wrong, maybe you\'ve changed it. If you don\'t recognize that activity, We reccomend you to reset it. So you can get your account back'
-          //       break;
-          //     case 'auth/too-many-requests':
-          //       messageError = 'Sorry, You\'ve try so much, wait until the next chance'
-          //       break;
-          //     default:
-          //       messageError = 'Please contact us, so we know your problem'
-          //       break;
-          //   }
-            
-          //   // Create toast
-          //   const errorToast = $f7.toast.create({
-          //     text: messageError,
-          //     closeTimeout: 2000,
-          //     destroyOnClose: true,
-          //   });
-          //   // Open it
-          //   errorToast.open();
-  
-  
-          // });
-          
-  
-        } else {
-          // Create toast
-          const errorToast = $f7.toast.create({
-              text: "Idiot",
-              closeTimeout: 2000,
-              destroyOnClose: true,
-            });
-            // Open it
-          errorToast.open();
-          $f7.preloader.hide();
+
+        if(!error) {
+          isLoading =false;
+          $update()
+          console.log('success')
+          console.log('if not error',user)
+          console.log('if not error',session)
+          $f7.dialog.alert('Yohooo, ' + user.email, () => {
+            // $f7.loginScreen.close();
+            $f7router.back('/');
+           });
+        }else{
+          isLoading =false;
+          $update()
+          console.log('error');
+          console.log(error);
         }
-  
-  
-        
+        console.log(user)
+        console.log(session)
+        // return user;
       }
-  
+
       const closeLogin = () => {
         $f7router.back('/');
       }
   
       // Lifecycle
       $onMounted(() => {
+        supabase.auth.onAuthStateChange((event, session) => {
+          console.log(event, session)
+        })
   
       });
   

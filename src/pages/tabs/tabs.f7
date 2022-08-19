@@ -13,10 +13,20 @@
                 <i id="conn-status" class="icon f7-icons if-not-md">wifi</i>
                 <i id="conn-status-md" class="icon material-icons if-md">wifi</i>
               </a>
-              <a href="/panel-right/" class="link icon-only">
-                <i class="icon f7-icons if-not-md">menu</i>
-                <i class="icon material-icons if-md">menu</i>
+              
+              ${user.email ? $h`
+                <a href="/panel-right/" class="link icon-only" id="user-panel">
+                  <i class="icon f7-icons if-not-md">menu</i>
+                  <i class="icon material-icons if-md">menu</i>
+                </a>
+              ` : $h` 
+              <a href="/login/" class="link icon-only" id="user-panel">
+                <i class="icon f7-icons if-not-md">power_settings_new</i>
+                <i class="icon material-icons if-md">login</i>
               </a>
+              `}
+
+              
             </div>
           </div>
         </div>
@@ -62,9 +72,27 @@
     </div>
 </template>
 <script>
-export default function (props, {$f7, $store, $on, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
-  
+  import {supabase} from '../../js/supabase'
+export default function (props, {$f7, $store, $on, $update, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
+  const session = supabase.auth.session()
+  const user = 'iii';
+
   $onMounted(() => {
+
+    
+  // onAuthStateChanged(auth, user => {
+  //   console.log();
+  //   console.log('Check Auth');
+  // //   if (session) {reject()} else {resolve()}
+  // });
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    console.log(event, session)
+    user ? session.user : '';
+    console.log('Tabs',user);
+    $update()
+  })
+    
     console.log('onMounted Tabs Page');
   });
 

@@ -5,7 +5,8 @@ const now = new Date();
 // console.log('buildNumber',dateFormat(now, "yymmdd.HHMMss"));
 console.log('NameVersion',versionApp+'-'+dateFormat(now, "yymmdd.HHMMss"));
 
-import { supabase, session } from '../js/supabase.js';
+import { supabase } from '../js/supabase.js';
+const session = supabase.auth.session();
 
 import $$ from 'dom7';
 import Framework7 from './framework7-custom.js';
@@ -85,6 +86,8 @@ var app = new Framework7({
       // console.log('tabHide',params)
     },
     pageInit: function (page) {
+
+      console.log(session);
       //Localization on Another Page, we have to initialised again.
       // startI18Next(getLanguageStorage);
       // console.log(page);
@@ -108,6 +111,9 @@ var app = new Framework7({
 });
 
 app.on('connection', function (isOnline) {
+  supabase.auth.onAuthStateChange((event, session) => {
+    console.log(event, session)
+  })
   onlineIconSet(isOnline);
 });
 

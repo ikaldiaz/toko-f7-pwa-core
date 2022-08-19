@@ -16,11 +16,12 @@ import Tab2Page from '../pages/tabs/tab-2.f7';
 import Tab3Page from '../pages/tabs/tab-3.f7';
 import Tab4Page from '../pages/tabs/tab-4.f7';
 
-import { supabase, session } from '../js/supabase';
+import { supabase, signOut } from '../js/supabase';
 
 
 function checkAuth({ to, from, resolve, reject }) {
-  console.log(session);
+  const session = supabase.auth.session()
+  console.log('session on route',session)
   // onAuthStateChanged(auth, user => {
     console.log('Check Auth');
     if (session) {reject()} else {resolve()}
@@ -103,6 +104,29 @@ var routes = [
     options:{
       clearPreviousHistory :true
     }
+  }, 
+  {
+    path: '/logout/',
+    options:{
+      clearPreviousHistory :true
+    },
+    async: function ({ router, to, resolve }) {
+      // App instance
+      var app = router.app;
+      // Show Preloader
+      app.progressbar.show('multi');
+      signOut()
+      .then((error)=>{
+        // Hide Preloader
+        app.progressbar.hide();
+        // Resolve route to load page
+        resolve(
+          {
+            component: ScreenLogin
+          },
+        );
+      });
+    },
   }, 
   {
     path: '/panel-right/',

@@ -7,6 +7,7 @@
         <p>Each tab/view may have different layout, different navbar type (dynamic, fixed or static) or without navbar like this tab.</p>
       </div>
       <div class="block-title">Navigation</div>
+      <div class="block-title">${user.email}</div>
       
       <div class="list">
         <ul>
@@ -21,6 +22,21 @@
             <a href="/login/" class="item-content item-link">
               <div class="item-inner">
                 <div class="item-title">Login</div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="/register/" class="item-content item-link">
+              <div class="item-inner">
+                <div class="item-title">Register</div>
+              </div>
+            </a>
+          </li>
+          
+          <li>
+            <a href="/logout/" class="item-content item-link">
+              <div class="item-inner">
+                <div class="item-title">Logout</div>
               </div>
             </a>
           </li>
@@ -76,13 +92,22 @@
 </style> -->
 <!-- rest of component logic -->
 <script>
+  
+  import { supabase } from '../../js/supabase.js';
   // script must return/export component function
   export default (props, { $, $f7, $on, $onMounted }) => {
+    const session = supabase.auth.session();
+    const user = session.user;
 
     $onMounted(() => {
+      console.log(user);
+      
+
       $('.tab-link-1').removeClass('tab-link-active')
       console.log('onMount Tab 1');
       $('.tab-link-1').addClass('tab-link-active')
+
+      
     });
 
     // component function must return render function
