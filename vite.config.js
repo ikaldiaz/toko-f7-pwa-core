@@ -3,14 +3,9 @@ import path from 'path';
 import framework7 from 'rollup-plugin-framework7';
 
 process.env.TARGET = process.env.TARGET || 'web';
-const isCordova = process.env.TARGET === 'cordova';
-const isElectronWatch = process.env.ELECTRON_WATCH || false;
 const SRC_DIR = path.resolve(__dirname, './src');
 const PUBLIC_DIR = path.resolve(__dirname, './public');
-const BUILD_DIR = path.resolve(
-  __dirname,
-  isCordova ? (isElectronWatch ? 'cordova/platforms/electron/www' : 'cordova/www') : './www',
-  );
+const BUILD_DIR = path.resolve(__dirname, './www',);
   
   
 export default defineConfig(({ command, mode }) => {
@@ -41,10 +36,10 @@ export default defineConfig(({ command, mode }) => {
         assetFileNames: "[name].[ext]",
         // sourcemap: true,
         manualChunks: {
-          'jquery':['jquery'],
-          'jquery-i18next':['jquery-i18next'],
-          'i18next':['i18next'],
-          'dateformat':['dateformat'],
+          // 'jquery':['jquery'],
+          // 'jquery-i18next':['jquery-i18next'],
+          // 'i18next':['i18next'],
+          // 'dateformat':['dateformat'],
           'frameworkX':['framework7'],
         }
       }

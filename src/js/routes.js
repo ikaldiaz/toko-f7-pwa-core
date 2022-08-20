@@ -19,13 +19,53 @@ import Tab4Page from '../pages/tabs/tab-4.f7';
 import { supabase, signOut } from '../js/supabase';
 
 
-function checkAuth({ to, from, resolve, reject }) {
+function redirectScreen({to, resolve, reject}) {
   const session = supabase.auth.session()
-  console.log('session on route',session)
-  // onAuthStateChanged(auth, user => {
-    console.log('Check Auth');
-    if (session) {reject()} else {resolve()}
-  // });
+  console.log('session on redirect route',session)
+  if (session!=null) {
+    resolve('/catalog/');
+  }if(session==null){
+    app.views.main.router.navigate();
+  }
+  else{
+    reject();
+  }
+}
+
+function checkNoAuth({ to, from, resolve, reject }) {
+  const session = supabase.auth.session()
+  if (session==null) {
+    resolve();
+  } else {
+    reject();
+  }
+}
+
+function confirmLogout({ to, from, resolve, reject }) {
+  app.f7.dialog.confirm(
+    'Are you sure you want to Logout?',
+    function () {
+      // proceed navigation
+      // Show Preloader
+      app.f7.progressbar.show('multi');
+      signOut()
+      .then((error)=>{
+        // Hide Preloader
+        app.f7.progressbar.hide();
+        // app.f7.progressbar.hide();
+        // Resolve route to load page
+        resolve(
+          {
+            component: ScreenLogin
+          },
+        );
+      });
+    },
+    function () {
+      // stay on page
+      reject();
+    }
+  )
 }
 
 var routes = [
@@ -35,6 +75,7 @@ var routes = [
   //   component: HomePage,
   // },
   {
+    name: 'home',
     path: '/',
     component: RoutableTab,
     // Pass "tabs" property to route, must be array with tab routes:
@@ -89,45 +130,53 @@ var routes = [
   },
   {
     path: '/login/',
-    // check if the user is logged in
-    beforeEnter: checkAuth,
+    // check if the user is NOT logged in
+    beforeEnter: checkNoAuth,
+    // redirect: redirectScreen,
     component: ScreenLogin,
     options:{
       clearPreviousHistory :true
-    }
+    },
   },
   {
     path: '/register/',
-    // check if the user is logged in
-    beforeEnter: checkAuth,
+    // check if the user is NOT logged in
+    beforeEnter: checkNoAuth,
+    // redirect: redirectScreen,
     component: ScreenRegister,
     options:{
       clearPreviousHistory :true
     }
   }, 
-  {
-    path: '/logout/',
-    options:{
-      clearPreviousHistory :true
-    },
-    async: function ({ router, to, resolve }) {
-      // App instance
-      var app = router.app;
-      // Show Preloader
-      app.progressbar.show('multi');
-      signOut()
-      .then((error)=>{
-        // Hide Preloader
-        app.progressbar.hide();
-        // Resolve route to load page
-        resolve(
-          {
-            component: ScreenLogin
-          },
-        );
-      });
-    },
-  }, 
+  // {
+  //   path: '/logout/',
+  //   beforeEnter: function confirmLogout({ to, from, resolve, reject }) {
+  //     app.f7.dialog.confirm(
+  //       'Are you sure you want to Logout?',
+  //       function () {
+  //         // proceed navigation
+  //         // Show Preloader
+  //         app.f7.progressbar.show('multi');
+  //         signOut()
+  //         .then((error)=>{
+  //           // Hide Preloader
+  //           app.f7.progressbar.hide();
+  //           // app.f7.progressbar.hide();
+  //           // Resolve route to load page
+  //           resolve(
+  //             {
+  //               name: 'home'
+  //             },
+  //           );
+  //         });
+  //       },
+  //       function () {
+  //         // stay on page
+  //         reject();
+  //       }
+  //     )
+  //   }
+  // }, 
   {
     path: '/panel-right/',
     name:'panel-right',

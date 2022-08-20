@@ -5,9 +5,6 @@ const now = new Date();
 // console.log('buildNumber',dateFormat(now, "yymmdd.HHMMss"));
 console.log('NameVersion',versionApp+'-'+dateFormat(now, "yymmdd.HHMMss"));
 
-import { supabase } from '../js/supabase.js';
-const session = supabase.auth.session();
-
 import $$ from 'dom7';
 import Framework7 from './framework7-custom.js';
 
@@ -37,13 +34,13 @@ var app = new Framework7({
   id: 'com.mbgae.pwa.toko', // App bundle ID
   // activeState:true,
   view: {
-    // reloadPages:true,
+    reloadPages:true,
     browserHistory: true,
     // browserHistorySeparator:'appx',
     // browserHistoryRoot :'/',
-    // browserHistoryStoreHistory: true,
-    unloadTabContent:true,
-    // initRouterOnTabShow:true,
+    browserHistoryStoreHistory: true,
+    // unloadTabContent:false,
+    initRouterOnTabShow:true,
     browserHistoryTabs:'push',
   },
   toolbar: {
@@ -72,6 +69,10 @@ var app = new Framework7({
   on: {
     init: function () {
       // console.log("init");
+      // supabase.auth.onAuthStateChange((event, session) => {
+      //   console.log('app init',event);
+      //   console.log('app init',session);
+      // })
     },
     tabShow:function name(params) {
       // console.log(params)
@@ -87,7 +88,7 @@ var app = new Framework7({
     },
     pageInit: function (page) {
 
-      console.log(session);
+      console.log('app on pageInit');
       //Localization on Another Page, we have to initialised again.
       // startI18Next(getLanguageStorage);
       // console.log(page);
@@ -111,9 +112,6 @@ var app = new Framework7({
 });
 
 app.on('connection', function (isOnline) {
-  supabase.auth.onAuthStateChange((event, session) => {
-    console.log(event, session)
-  })
   onlineIconSet(isOnline);
 });
 

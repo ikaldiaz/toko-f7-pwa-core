@@ -1,9 +1,10 @@
 import { createClient } from '@supabase/supabase-js'
+
 const options = {
   schema: 'public',
   // headers: { 'x-my-custom-header': 'my-app-name' },
   // autoRefreshToken: true,
-  persistSession: true,
+  // persistSession: true,
   // detectSessionInUrl: true,
 }
 // console.log(import.meta.env.VITE_SUPABASE_URL);
@@ -13,7 +14,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_PUBLIC_ANON_KEY
 const supabase = createClient(
   supabaseUrl, 
   supabaseAnonKey,
-  options
+  // options
   )
 
 // const session = supabase.auth.session()

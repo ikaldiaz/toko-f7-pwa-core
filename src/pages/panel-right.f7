@@ -15,9 +15,9 @@
                 <div class="block">
                     
                 </div>
-                ${client.value.email ? $h`
+                ${user.email ? $h`
                 <div class="container">
-                    ${client.value.photoUrl ? $h`
+                    ${user.photoUrl ? $h`
                         <div style="--bg-img: url('${client.value.photoUrl}')" class="outer">
                             <div class="inner">
                                 <a href="/popup-img-profile/" class="link color-yellow" id="edit-profile-img">
@@ -27,7 +27,7 @@
                             </div>
                         </div>
                     ` : $h`
-                        <div style="--bg-img: url('assets/logo/logo-rounded.svg')" class="outer">
+                        <div style="--bg-img: url('icons/256x256.png')" class="outer">
                             <div class="inner">
                                 <a href="/popup-img-profile/" class="link color-yellow" id="edit-profile-img">
                                     
@@ -46,10 +46,10 @@
                     <li class="item-divider">Divider title here</li>
                     <!-- Another list items -->
                     <li>
-                    <a href="#">${client.value.photoUrl ? $h `${client.value.photoUrl} `: $h` `}</a>
+                    <a href="#">${user.photoUrl ? $h `${user.photoUrl} `: $h` `}</a>
                     </li>
                     <li>
-                    <a href="#">${client.value.email ? $h `${client.value.email} `: $h` `}</a>
+                    <a href="#">${user.email ? $h `${user.email} `: $h` `}</a>
                     </li>
                     <li>
                     <a href="#">Link Item 3</a>
@@ -87,26 +87,27 @@ p {
 <script>
     
 import { supabase } from '../js/supabase.js';
-export default function (props, {$f7, $store, $on, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
-    const client = $store.getters.client;
-    // console.log(client.value.photoUrl);
+export default function (props, {$f7, $store, $on, $update, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
+    const session = supabase.auth.session();
+    let user = '';
 
     // Lifecycle
     $onBeforeMount(() => {
         // const auth = auth;
-        // console.log('onBeforeMount');
+        console.log('onBeforeMount');
     });
-    $onMounted(() => {
-        supabase.auth.onAuthStateChange((event, session) => {
-        console.log(event, session)
-        })
+    $onMounted(() => {     
+      user = session.user ? session.user : ''
+      $update()
+      console.log('panelRight onMounted', user);
+
+        
     });
     $onBeforeUnmount(() => {
-        // console.log('onBeforeUnmount');
-        // console.log('onBeforeUnmount');
+        console.log('onBeforeUnmount');
     });
     $onUnmounted(() => {
-        // console.log('onUnmounted');
+        console.log('onUnmounted');
     });
 
     // Return render function

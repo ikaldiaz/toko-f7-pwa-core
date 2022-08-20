@@ -7,17 +7,25 @@
         <p>Each tab/view may have different layout, different navbar type (dynamic, fixed or static) or without navbar like this tab.</p>
       </div>
       <div class="block-title">Navigation</div>
-      <div class="block-title">${user.email}</div>
+      <div class="block-title">
+        ${session ? $h`
+          ${session.user.email}
+          ` : $h` 
+
+          `}
+      </div>
       
       <div class="list">
         <ul>
+          ${session ? $h`
           <li>
-            <a href="/tabs/" class="item-content item-link">
+            <a href="#" class="item-content item-link logout-btn" @click="${logOut}">
               <div class="item-inner">
-                <div class="item-title">Tabs Routable</div>
+                <div class="item-title">Logout</div>
               </div>
             </a>
           </li>
+          ` : $h` 
           <li>
             <a href="/login/" class="item-content item-link">
               <div class="item-inner">
@@ -32,14 +40,7 @@
               </div>
             </a>
           </li>
-          
-          <li>
-            <a href="/logout/" class="item-content item-link">
-              <div class="item-inner">
-                <div class="item-title">Logout</div>
-              </div>
-            </a>
-          </li>
+          `}
           <li>
             <a href="/about/" class="item-content item-link">
               <div class="item-inner">
@@ -93,15 +94,32 @@
 <!-- rest of component logic -->
 <script>
   
-  import { supabase } from '../../js/supabase.js';
+  import { supabase, signOut } from '../../js/supabase.js';
   // script must return/export component function
-  export default (props, { $, $f7, $on, $onMounted }) => {
+  export default (props, { $, $f7, $f7router, $on, $onMounted, $update }) => {
     const session = supabase.auth.session();
-    const user = session.user;
 
-    $onMounted(() => {
-      console.log(user);
-      
+    const logOut = () => {
+      $f7.dialog.confirm(
+        'Are you sure you want to Logout?',
+        function () {
+          $f7.progressbar.show('multi');
+          signOut()
+          .then((error)=>{
+            console.log(error);
+            $f7.progressbar.hide();
+            $f7router.refreshPage()
+          });
+        },
+        function () {
+          $f7.progressbar.hide();
+          // stay on page
+        }
+      )
+    }
+
+    $onMounted(() => {      
+      console.log('tab-1 onMounted', session);
 
       $('.tab-link-1').removeClass('tab-link-active')
       console.log('onMount Tab 1');
