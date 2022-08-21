@@ -1,12 +1,12 @@
 <template>
   <div class="page no-navbar no-toolbar no-swipeback">
     <div class="page-content login-screen-content">
-      <div class="x-login-screen">
+      <div class="x-signup-screen">
         <a href="#" class="button button-fill" @click="${backToLogin}">
           <i class="material-icons">close</i>
         </a>
       </div> 
-      <img data-src="icons/favicon.png" class="lazy lazy-fade-in logo-lazy" width="300" height="300"  />
+      <img id="signup-logo" data-src="icons/favicon.png" class="lazy lazy-fade-in logo-lazy" width="300" height="300"  />
       <div class="login-screen-title">Register</div>
       <form>
         <div class="list no-hairlines-md block">
@@ -77,8 +77,8 @@
   </div>
 </template>
 <style>
-  /* Screen Register */
-  /* .x-login-screen{
+  /* Screen Login */
+  .x-signup-screen{
     position:absolute;
     top:10px;
     right:10px;
@@ -90,10 +90,10 @@
     margin-top: 30px;
     margin-left: auto;
     margin-right: auto;
-  } */
+  }
 </style>
 <script>
-  import { supabase, signUp as signUpWithEmailAndPassword, isEmailAddress } from '../js/supabase.js';
+  import { supabase, signUp as signUpSupabase, isEmailAddress } from '../js/supabase.js';
 
   // async function signUpWithEmail(emailx, passx) {
   //   const { user, session, error } = await supabase.auth.signUp({
@@ -117,7 +117,6 @@
     let email = '';
     let password = '';
     let isLoading = false;
-
     let checkForm = false;
 
 
@@ -146,7 +145,7 @@
       $update();
 
       
-      signUpWithEmailAndPassword(email, password)
+      signUpSupabase(email, password)
       .then((user) =>{
         console.log(user);
         isLoading = false;
@@ -176,7 +175,8 @@
     }
 
     const backToLogin = () => {
-      $f7router.back('/login/');
+      // $f7router.back('/login/');
+      $f7.loginScreen.close()
     }
 
     function writeUserData(user) {

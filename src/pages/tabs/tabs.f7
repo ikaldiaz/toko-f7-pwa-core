@@ -20,8 +20,8 @@
                   <i class="icon material-icons if-md">menu</i>
                 </a>
               ` : $h` 
-              <a href="/login/" class="link icon-only" id="user-panel">
-                <i class="icon f7-icons if-not-md">power_settings_new</i>
+              <a href="#" class="link icon-only login-screen-open" id="user-panel" data-login-screen="#my-login-screen">
+                <i class="icon f7-icons if-not-md">login</i>
                 <i class="icon material-icons if-md">login</i>
               </a>
               `}

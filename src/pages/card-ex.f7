@@ -1,0 +1,123 @@
+<template>
+    <div class="page no-navbar" data-name="card-ex">
+      <div class="navbar navbar-transparent">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner sliding">
+          <div class="left">
+            <a href="#" class="link back">
+              <i class="icon icon-back"></i>
+              <span class="if-not-md">Back</span>
+            </a>
+          </div>
+          <div class="title">${currentProduct.title}</div>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="block-title">About ${currentProduct.title}</div>
+        <div class="block block-strong">
+          ${currentProduct.description}
+        </div>
+
+        <div class="block">
+          <!-- custom backdrop element -->
+          <div class="card-backdrop custom-backdrop"></div>
+          <!-- pass its CSS selector in data-backdrop-el attribute -->
+          <div class="card card-expandable" data-backdrop-el=".custom-backdrop">
+            <div class="card-content">
+              <div class="bg-color-red" style="height: 300px">
+                <div class="card-header text-color-white display-block">Expandable Card<br />
+                  <small style="opacity: 0.7">Custom Backdrop</small>
+                </div>
+                <a href="#" class="link card-close card-opened-fade-in color-white"
+                  style="position: absolute; right: 15px; top: 15px">
+                  <i class="icon f7-icons">xmark_circle_fill</i>
+                </a>
+              </div>
+              <div class="card-content-padding">
+                <p>Framework7 - is a free and open source HTML mobile framework to develop hybrid mobile apps or web
+                  apps with iOS or Android (Material) native look and feel. It is also an indispensable prototyping apps
+                  tool to show working app prototype as soon as possible in case you need to.</p>
+                <p>The main approach of the Framework7 is to give you an opportunity to create iOS and Android
+                  (Material) apps with HTML, CSS and JavaScript easily and clear. Framework7 is full of freedom. It
+                  doesn't limit your imagination or offer ways of any solutions somehow. Framework7 gives you freedom!
+                </p>
+                <p>Framework7 is not compatible with all platforms. It is focused only on iOS and Android (Material) to
+                  bring the best experience and simplicity.</p>
+                <p>Framework7 is definitely for you if you decide to build iOS and Android hybrid app (Cordova or
+                  Capacitor) or web app that looks like and feels as great native iOS or Android (Material) apps.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-expandable">
+          <div class="card-content">
+            <div class="bg-color-red" style="height: 300px">
+              <div class="card-header text-color-white display-block">Framework7<br />
+                <small style="opacity: 0.7">Build Mobile Apps</small>
+              </div>
+              <a href="#" class="link card-close card-opened-fade-in color-white"
+                style="position: absolute; right: 15px; top: 15px">
+                <i class="icon f7-icons">xmark_circle_fill</i>
+              </a>
+            </div>
+            <div class="card-content-padding">
+              <p>Framework7 - is a free and open source HTML mobile framework to develop hybrid mobile apps or web
+                apps with iOS or Android (Material) native look and feel. It is also an indispensable prototyping apps
+                tool to show working app prototype as soon as possible in case you need to.</p>
+              <p>The main approach of the Framework7 is to give you an opportunity to create iOS and Android
+                (Material) apps with HTML, CSS and JavaScript easily and clear. Framework7 is full of freedom. It
+                doesn't limit your imagination or offer ways of any solutions somehow. Framework7 gives you freedom!
+              </p>
+              <p>Framework7 is not compatible with all platforms. It is focused only on iOS and Android (Material) to
+                bring the best experience and simplicity.</p>
+              <p>Framework7 is definitely for you if you decide to build iOS and Android hybrid app (Cordova or
+                Capacitor) or web app that looks like and feels as great native iOS or Android (Material) apps.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card card-expandable">
+          <div class="card-content">
+            <div class="bg-color-yellow" style="height: 300px">
+              <div class="card-header text-color-black display-block">Framework7<br />
+                <small style="opacity: 0.7">Build Mobile Apps</small>
+              </div>
+              <a href="#" class="link card-close card-opened-fade-in color-black"
+                style="position: absolute; right: 15px; top: 15px">
+                <i class="icon f7-icons">xmark_circle_fill</i>
+              </a>
+            </div>
+            <div class="card-content-padding">
+              <p>Framework7 - is a free and open source HTML mobile framework to develop hybrid mobile apps or web
+                apps with iOS or Android (Material) native look and feel. It is also an indispensable prototyping apps
+                tool to show working app prototype as soon as possible in case you need to.</p>
+              <p>The main approach of the Framework7 is to give you an opportunity to create iOS and Android
+                (Material) apps with HTML, CSS and JavaScript easily and clear. Framework7 is full of freedom. It
+                doesn't limit your imagination or offer ways of any solutions somehow. Framework7 gives you freedom!
+              </p>
+              <p>Framework7 is not compatible with all platforms. It is focused only on iOS and Android (Material) to
+                bring the best experience and simplicity.</p>
+              <p>Framework7 is definitely for you if you decide to build iOS and Android hybrid app (Cordova or
+                Capacitor) or web app that looks like and feels as great native iOS or Android (Material) apps.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </template>
+  <script>
+    export default (props, { $f7route, $store }) => {
+      const products = $store.getters.products;
+      const productId = $f7route.params.id;
+      let currentProduct;
+      products.value.forEach((product) => {
+        if (product.id === productId) {
+          currentProduct = product;
+        }
+      });
+  
+      return $render;
+    };
+  </script>
+  

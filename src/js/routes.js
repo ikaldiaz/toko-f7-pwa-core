@@ -1,4 +1,5 @@
 import ProductPage from '../pages/product.f7';
+import ExCardPage from '../pages/card-ex.f7';
 
 import PanelRight from '../pages/panel-right.f7';
 
@@ -10,63 +11,11 @@ import RequestAndLoad from '../pages/request-and-load.f7';
 import NotFoundPage from '../pages/404.f7';
 
 
-import RoutableTab from '../pages/tabs/tabs.f7';
+import MainTab from '../pages/tabs/tabs.f7';
 import Tab1Page from '../pages/tabs/tab-1.f7';
 import Tab2Page from '../pages/tabs/tab-2.f7';
 import Tab3Page from '../pages/tabs/tab-3.f7';
 import Tab4Page from '../pages/tabs/tab-4.f7';
-
-import { supabase, signOut } from '../js/supabase';
-
-
-function redirectScreen({to, resolve, reject}) {
-  const session = supabase.auth.session()
-  console.log('session on redirect route',session)
-  if (session!=null) {
-    resolve('/catalog/');
-  }if(session==null){
-    app.views.main.router.navigate();
-  }
-  else{
-    reject();
-  }
-}
-
-function checkNoAuth({ to, from, resolve, reject }) {
-  const session = supabase.auth.session()
-  if (session==null) {
-    resolve();
-  } else {
-    reject();
-  }
-}
-
-function confirmLogout({ to, from, resolve, reject }) {
-  app.f7.dialog.confirm(
-    'Are you sure you want to Logout?',
-    function () {
-      // proceed navigation
-      // Show Preloader
-      app.f7.progressbar.show('multi');
-      signOut()
-      .then((error)=>{
-        // Hide Preloader
-        app.f7.progressbar.hide();
-        // app.f7.progressbar.hide();
-        // Resolve route to load page
-        resolve(
-          {
-            component: ScreenLogin
-          },
-        );
-      });
-    },
-    function () {
-      // stay on page
-      reject();
-    }
-  )
-}
 
 var routes = [
   // {
@@ -77,7 +26,7 @@ var routes = [
   {
     name: 'home',
     path: '/',
-    component: RoutableTab,
+    component: MainTab,
     // Pass "tabs" property to route, must be array with tab routes:
     tabs: [
       // First (default) tab has the same url as the page itself
@@ -128,26 +77,6 @@ var routes = [
       },
     ],
   },
-  {
-    path: '/login/',
-    // check if the user is NOT logged in
-    beforeEnter: checkNoAuth,
-    // redirect: redirectScreen,
-    component: ScreenLogin,
-    options:{
-      clearPreviousHistory :true
-    },
-  },
-  {
-    path: '/register/',
-    // check if the user is NOT logged in
-    beforeEnter: checkNoAuth,
-    // redirect: redirectScreen,
-    component: ScreenRegister,
-    options:{
-      clearPreviousHistory :true
-    }
-  }, 
   // {
   //   path: '/logout/',
   //   beforeEnter: function confirmLogout({ to, from, resolve, reject }) {
@@ -206,7 +135,10 @@ var routes = [
     path: '/product/:id/',
     component: ProductPage,
   },
-
+  {
+    path: '/ex-card/:id/',
+    component: ExCardPage,
+  },
   {
     path: '/dynamic-route/blog/:blogId/post/:postId/',
     component: DynamicRoutePage,

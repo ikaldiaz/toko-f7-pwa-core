@@ -155,7 +155,9 @@
       }
 
       const closeLogin = () => {
-        $f7router.back('/');
+        $f7router.navigate('/',{
+          // re
+        });
       }
   
       // Lifecycle

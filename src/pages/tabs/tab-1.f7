@@ -25,22 +25,29 @@
               </div>
             </a>
           </li>
-          ` : $h` 
+          ` : $h`
           <li>
-            <a href="/login/" class="item-content item-link">
+            <a href="#" class="item-content item-link" @click="${signinCall}">
               <div class="item-inner">
-                <div class="item-title">Login</div>
+                <div class="item-title">Login from Root App</div>
               </div>
             </a>
           </li>
           <li>
-            <a href="/register/" class="item-content item-link">
+            <a href="#" class="item-content item-link" @click="${signupCall}">
               <div class="item-inner">
-                <div class="item-title">Register</div>
+                <div class="item-title">Register from Root App</div>
               </div>
             </a>
           </li>
           `}
+          <li>
+            <a href="/ex-card/1/" class="item-content item-link">
+              <div class="item-inner">
+                <div class="item-title">Expandable Card</div>
+              </div>
+            </a>
+          </li>
           <li>
             <a href="/about/" class="item-content item-link">
               <div class="item-inner">
@@ -56,7 +63,7 @@
             </a>
           </li>
         </ul>
-      </div>
+      </div> 
 
       <div class="block-title">Modals</div>
       <div class="block block-strong">
@@ -83,6 +90,7 @@
           </li>
         </ul>
       </div>
+      
     </div>
 </template>
 <!-- component styles -->
@@ -98,6 +106,14 @@
   // script must return/export component function
   export default (props, { $, $f7, $f7router, $on, $onMounted, $update }) => {
     const session = supabase.auth.session();
+
+    const signinCall = ()=>{
+      $f7.loginScreen.open('#root-login-screen', true);
+    }
+
+    const signupCall = ()=>{
+      $f7.loginScreen.open('#root-register-screen', true);
+    }
 
     const logOut = () => {
       $f7.dialog.confirm(

@@ -34,7 +34,7 @@ var app = new Framework7({
   id: 'com.mbgae.pwa.toko', // App bundle ID
   // activeState:true,
   view: {
-    reloadPages:true,
+    // reloadPages:true,
     browserHistory: true,
     // browserHistorySeparator:'appx',
     // browserHistoryRoot :'/',
@@ -46,18 +46,18 @@ var app = new Framework7({
   toolbar: {
     // hideOnPageScroll: true,
   },
-  navbar: {
-    hideOnPageScroll: true,
-    snapPageScrollToLargeTitle: false,
-    collapseLargeTitleOnScroll: true,
-    // iosCenterTitle: false,
-  },
+  // navbar: {
+  //   hideOnPageScroll: true,
+  //   snapPageScrollToLargeTitle: false,
+  //   collapseLargeTitleOnScroll: true,
+  //   // iosCenterTitle: false,
+  // },
   //lazy modules
-  lazy: {
-    placeholder:'icons/favicon.png',
-    threshold: 0,
-    sequential: true
-  }, 
+  // lazy: {
+  //   placeholder:'icons/favicon.png',
+  //   threshold: 0,
+  //   sequential: true
+  // }, 
   // App store
   store: store,
   // App routes
@@ -132,6 +132,8 @@ function onlineIconSet(isOnline) {
     $$('#conn-status-md').removeClass('color-green').addClass('color-red')
   }
 }
+
+
 
 
 

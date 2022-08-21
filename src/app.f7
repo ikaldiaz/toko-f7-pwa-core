@@ -44,72 +44,295 @@
       </div>
     </div>
 
+
+
     <!-- Login Screen -->
-    <div class="login-screen" id="my-login-screen">
+    <div class="login-screen" id="root-login-screen">
       <div class="view">
         <div class="page">
           <div class="page-content login-screen-content">
+            <!-- <div class="login-screen-logo"> -->
+              <div class="header-login-screen">
+                <a href="#" class="button button-fill" @click="${closeLogin}">
+                  <i class="material-icons">close</i>
+                </a>
+              </div>
+              <img id="logo-main" src="icons/favicon.png" width="auto" height="25%" />
+            <!-- </div> -->
             <div class="login-screen-title">Login</div>
-            <div class="list">
-              <ul>
-                <li class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">Username</div>
-                    <div class="item-input-wrap">
-                      <input type="text" name="username" placeholder="Your username" value="${username}" @input="${updateUsername}"/>
-
+            
+            <form>
+              <div class="list">
+                <ul>
+                  <li class="item-content item-input">
+                    <div class="item-inner">
+                      <div class="item-title item-label">Email</div>
+                      <div class="item-input-wrap">
+                        <input type="text" name="email" placeholder="Your Email" value="${usernameLogin}" @input="${updateUsernameLogin}" />
+                      </div>
                     </div>
-                  </div>
-                </li>
-                <li class="item-content item-input">
-                  <div class="item-inner">
-                    <div class="item-title item-label">Password</div>
-                    <div class="item-input-wrap">
-                      <input type="password" name="password" placeholder="Your password" value="${password}" @input="${updatePassword}"/>
-
+                  </li> 
+                  <li class="item-content item-input">
+                    <div class="item-inner">
+                      <div class="item-title item-label">Password</div>
+                      <div class="item-input-wrap">
+                        <input type="password" name="password" placeholder="Your password" value="${passwordLogin}" @input="${updatePasswordLogin}"  />
+                      </div>
                     </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="list">
-              <ul>
-                <li>
-                  <a href="#" class="item-link list-button login-button" @click="${alertLoginData}">Sign In</a>
-
-                </li>
-              </ul>
-              <div class="block-footer">Some text about login information.<br/>Click "Sign In" to close Login Screen</div>
-            </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="block-footer">
+                <p>Not registered yet?</p>
+              </div>
+              <div class="list inset block">
+                <ul>
+                  <li>
+                    <a href="#" id="signin-button" class="button button-large button-fill 
+                    ${isValidLogin ? '' : 'disabled'} 
+                    button-preloader 
+                    ${isLoading ? 'button-loading' : ''}"
+                     @click="${signIn}">
+                     <span class="preloader"></span>
+                     <span>Sign In</span>
+                    </a>
+                  </li>
+                </ul>
+                <div class="block-footer">
+                  <p>Not registered yet?</p>
+                </div>
+                <ul>
+                  <li>
+                    <a href="#" class="button button-large button-fill login-screen-open" data-login-screen="#my-signup-screen">Register</a>
+                  </li>
+                </ul>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- SignUp Screen -->
+    <div class="login-screen" id="root-register-screen">
+      <div class="view">
+        <div class="page">
+          <div class="page-content login-screen-content">
+            <div class="header-login-screen">
+              <a href="#" class="button button-fill" @click="${closeSignUp}">
+                <i class="material-icons">close</i>
+              </a>
+            </div> 
+            <img id="logo-main" src="icons/favicon.png" width="auto" height="25%" />
+            <div class="login-screen-title">Register</div>
+            <form>
+              <div class="list no-hairlines-md block">
+                <ul>
+                <li class="item-content item-input item-input-with-info">
+                  <div class="item-media">
+                    <i class="material-icons">person</i>
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title item-label">Name</div>
+                    <div class="item-input-wrap">
+                      <input type="text" value="${nameSignUp}" @input="${updateNameSignUp}" name="name" placeholder="John Doe" required validate />
+                      <span class="input-clear-button"></span>
+                      <div class="item-input-info">We sure that you have a good name</div>
+                    </div>
+                  </div>
+                </li>
+      
+                <li class="item-content item-input item-input-with-info">
+                  <div class="item-media">
+                    <i class="material-icons">email</i>
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title item-label">E-mail</div>
+                    <div class="item-input-wrap">
+                      <input type="email" value="${emailSignUp}" @input="${updateEmailSignUp}" name="email" placeholder="home@mail.com" required validate />
+                      <span class="input-clear-button"></span>
+                      <div class="item-input-info">You know what is email, right?</div>
+                    </div>
+                  </div>
+                </li>
+      
+                <li class="item-content item-input item-input-with-info">
+                  <div class="item-media">
+                    <i class="material-icons">lock</i>
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title item-label">Password</div>
+                    <div class="item-input-wrap">
+                      <input type="password" value="${passwordSignUp}" @input="${updatePasswordSignUp}" name="password" placeholder="********" required validate minlength="8" data-error-message="8 characters minimum"/>
+                      <span class="input-clear-button"></span>
+                      <div class="item-input-info">Make a good password, please</div>
+                    </div>
+                  </div>
+                </li>
+                </ul>
+              </div>
+              <div class="list inset block">
+                <ul>
+                  <li>
+                    <a href="#" id="register-button" class="button button-fill 
+                    ${checkFormSignUp ? '' : 'disabled'} 
+                    button-preloader 
+                    ${isLoading ? 'button-loading' : ''}"
+                    @click="${signUp}" >
+                    <span class="preloader"></span>
+                    <span>Sign Up</span> 
+                    </a>
+                  </li> 
+                </ul>
+                <div class="block-footer">
+                  <p>When you click the Sign Up button, you are agree with our Terms and Condition.</p>
+                  <p><a href="#" class="link" @click="${closeLogin}">Back to Login Page, not the Future</a></p>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+<style>
+/* Screen Custom */
+.header-login-screen{
+  position:absolute;
+  top:10px;
+  right:10px;
+}
+#logo-main {
+  display: block;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
 <script>
-  
-  import { supabase } from './js/supabase.js';
-  export default (props, { $f7, $update }) => {
-    // Login screen demo data
-    let username = '';
-    let password = '';
+  import { supabase, signIn, signUp as signUpSupabase, isEmailAddress } from './js/supabase.js';
+  export default function (props, { $on, $, $f7, $store, $f7router, $onMounted, $update }) {
+    // Login screen  
+    let usernameLogin = '';
+    let passwordLogin = '';
+    let isLoading = false;
+    let isValidLogin = false;
+    
+    // Login screen  
+    let nameSignUp = '';
+    let emailSignUp = '';
+    let passwordSignUp = '';
+    let checkFormSignUp = false;
+    
+    const updateUsernameLogin = (e) => {
+      usernameLogin = e.target.value;
+      isValidLogin = isEmailAddress(usernameLogin) && passwordLogin.length>8;
+      isValidLogin ? $('#signin-button').removeClass('disabled') : $('#signin-button').addClass('disabled');
+      $update();
+    }
+    const updatePasswordLogin = (e) => {
+      passwordLogin = e.target.value;
+      
+      isValidLogin = isEmailAddress(usernameLogin) && passwordLogin.length>8;
+      isValidLogin ? $('#signin-button').removeClass('disabled') : $('#signin-button').addClass('disabled');
+      $update();
+    }  
 
-    const updateUsername = (e) => {
-      username = e.target.value;
+    const updateNameSignUp = (e) => {
+      nameSignUp = e.target.value;
+      checkFormSignUp = isEmailAddress(emailSignUp) && passwordSignUp.length>8 && nameSignUp.length>5;
+      checkFormSignUp ? $('#register-button').removeClass('disabled') : $('#register-button').addClass('disabled');
       $update();
     }
-    const updatePassword = (e) => {
-      password = e.target.value;
+    const updateEmailSignUp = (e) => {
+      emailSignUp = e.target.value;
+      checkFormSignUp = isEmailAddress(emailSignUp) && passwordSignUp.length>8 && nameSignUp.length>5;
+      checkFormSignUp ? $('#register-button').removeClass('disabled') : $('#register-button').addClass('disabled');
       $update();
     }
-    const alertLoginData = () => {
-      $f7.dialog.alert('Username: ' + username + '<br/>Password: ' + password, () => {
+    const updatePasswordSignUp = (e) => {
+      passwordSignUp = e.target.value;
+      checkFormSignUp = isEmailAddress(emailSignUp) && passwordSignUp.length>8 && nameSignUp.length>5;
+      checkFormSignUp ? $('#register-button').removeClass('disabled') : $('#register-button').addClass('disabled');
+      $update();
+    }
+
+    
+    const signIn = async () => {
+        console.log(usernameLogin)
+        console.log(passwordLogin)
+
+
+        isLoading =true;
+        $update()
+        const { user, session, error } = await supabase.auth.signIn({
+          email: usernameLogin,
+          password: passwordLogin,
+        })
+            
+
+        if(!error) {
+          isLoading =false;
+          $update()
+          console.log('success')
+          console.log('if not error',user)
+          console.log('if not error',session)
+          $f7.dialog.alert('Yohooo, ' + user.email, () => {
+            // $f7.loginScreen.close();
+            $f7router.back('/');
+           });
+        }else{
+          isLoading =false;
+          $update()
+          console.log('error');
+          console.log(error);
+        }
+        console.log(user)
+        console.log(session)
+        // return user;
+      }
+
+    const closeLogin = () => {
         $f7.loginScreen.close();
-      });
+      }
+      
+    const signUp = () => {
+      // $f7.preloader.show();
+      isLoading = true;
+      $update();
+
+      
+      signUpSupabase(emailSignUp, passwordSignUp)
+      .then((user) =>{
+        console.log(user);
+        isLoading = false;
+        $update();
+      })
+      .catch((error) => {
+        console.log(error);
+        isLoading = false;
+        $update();
+      })
     }
 
+    const closeSignUp = () => {
+      // $f7router.back('/login/');
+      console.log($f7.loginScreen.open.length);
+      $f7.loginScreen.close()
+      $f7.loginScreen.close()
+    }
+
+  
+    // Lifecycle
+    $onMounted(() => {
+      // supabase.auth.onAuthStateChange((event, session) => {
+      //   console.log(event, session)
+      // })
+
+    });
+  
+    // Return render function
     return $render;
   }
 </script>
