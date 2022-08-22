@@ -70,9 +70,18 @@ const signOut = async () => {
   // console.log(session)
 }
 
-async function getTable(tableName) {
+async function getTable(tableName, order) {
   console.log('Calling from getTable in supabase.js');
-  const { data, error } = await supabase.from(tableName).select()
+  // const { data, error } = await supabase
+  // .from('cities')
+  // .select('name, country_id')
+  // .order('id', { ascending: false })
+
+  const { data, error } = await supabase
+  .from(tableName)
+  .select()
+  .order(order, { ascending: true })
+
   if(!error){
     console.log('Success getTable in supabase.js ');
     return data
@@ -81,6 +90,26 @@ async function getTable(tableName) {
     return false
   }
 }
+
+/*
+single()
+Retrieves only one row from the result. Result must be one row (e.g. using limit), otherwise this will result in an error.
+
+const { data, error } = await supabase
+  .from('cities')
+  .select('name, country_id')
+  .limit(1)
+  .single()
+
+Examples
+With select()
+const { data, error } = await supabase
+  .from('cities')
+  .select('name, country_id')
+  .limit(1)
+  .single()
+
+  */
 
 function isEmailAddress(em) {
   let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/; 

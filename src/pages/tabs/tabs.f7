@@ -20,7 +20,7 @@
                   <i class="icon material-icons if-md">menu</i>
                 </a>
               ` : $h` 
-              <a href="#" class="link icon-only login-screen-open" id="user-panel" data-login-screen="#my-login-screen">
+              <a href="#" class="link icon-only" id="user-panel" @click="${signinCall}">
                 <i class="icon f7-icons if-not-md">login</i>
                 <i class="icon material-icons if-md">login</i>
               </a>
@@ -52,10 +52,10 @@
                 <i class="icon material-icons if-md">shopping_cart</i>
                 <span class="tabbar-label">Cart</span>
               </a>
-              <a href="/cart-async/" class="tab-link tab-link-5" data-route-tab-id="tab5">
+              <a href="/products-async/" class="tab-link tab-link-5" data-route-tab-id="tab5">
                 <i class="icon f7-icons if-not-md">shopping_cart</i>
                 <i class="icon material-icons if-md">shopping_cart</i>
-                <span class="tabbar-label">Cart Async</span>
+                <span class="tabbar-label">Products</span>
               </a>
             </div>
         </div>
@@ -78,13 +78,25 @@
     </div>
 </template>
 <script>
-  import {supabase} from '../../js/supabase'
+import { supabase } from '../../js/supabase'
 export default function (props, {$f7, $store, $on, $update, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
   const session = supabase.auth.session()
+
+  const signinCall = ()=>{
+    $f7.loginScreen.open('#root-login-screen', true);
+  }
 
   $onMounted(() => {
     // console.log(session);
     console.log('onMounted Tabs',session);
+    // supabase.auth.onAuthStateChange((event, session) => {
+    //   console.log('onAuthStateChange')
+    //   if (event==='SIGNED_IN') {
+    //     console.log(typeof event)
+    //   } else {
+    //     $f7.loginScreen.open('#root-login-screen', true);
+    //   }
+    // })
 
 
     

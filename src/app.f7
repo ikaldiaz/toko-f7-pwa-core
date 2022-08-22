@@ -103,7 +103,7 @@
                 </div>
                 <ul>
                   <li>
-                    <a href="#" class="button button-large button-fill login-screen-open" data-login-screen="#my-signup-screen">Register</a>
+                    <a href="#" class="button button-large button-fill login-screen-open" data-login-screen="#root-register-screen">Register</a>
                   </li>
                 </ul>
               </div>
@@ -186,7 +186,7 @@
                 </ul>
                 <div class="block-footer">
                   <p>When you click the Sign Up button, you are agree with our Terms and Condition.</p>
-                  <p><a href="#" class="link" @click="${closeLogin}">Back to Login Page, not the Future</a></p>
+                  <p><a href="#" class="link" @click="${closeSignUp}">Back to Login Page, not the Future</a></p>
                 </div>
               </div>
             </form>
@@ -260,42 +260,42 @@
 
     
     const signIn = async () => {
-        console.log(usernameLogin)
-        console.log(passwordLogin)
+      console.log(usernameLogin)
+      console.log(passwordLogin)
 
 
-        isLoading =true;
+      isLoading =true;
+      $update()
+      const { user, session, error } = await supabase.auth.signIn({
+        email: usernameLogin,
+        password: passwordLogin,
+      })
+          
+
+      if(!error) {
+        isLoading =false;
         $update()
-        const { user, session, error } = await supabase.auth.signIn({
-          email: usernameLogin,
-          password: passwordLogin,
-        })
-            
-
-        if(!error) {
-          isLoading =false;
-          $update()
-          console.log('success')
-          console.log('if not error',user)
-          console.log('if not error',session)
-          $f7.dialog.alert('Yohooo, ' + user.email, () => {
-            // $f7.loginScreen.close();
-            $f7router.back('/');
-           });
-        }else{
-          isLoading =false;
-          $update()
-          console.log('error');
-          console.log(error);
-        }
-        console.log(user)
-        console.log(session)
-        // return user;
+        console.log('success')
+        console.log('if not error',user)
+        console.log('if not error',session)
+        $f7.dialog.alert('Hai, ' + user.email, () => {
+          $f7.loginScreen.close();
+          // $f7.router.refreshPage();
+          });
+      }else{
+        isLoading =false;
+        $update()
+        console.log('error');
+        console.log(error);
       }
+      // console.log(user)
+      // console.log(session)
+    }
 
     const closeLogin = () => {
-        $f7.loginScreen.close();
-      }
+      $f7.loginScreen.close();
+      // $f7.loginScreen.open('#root-login-screen', true);
+    }
       
     const signUp = () => {
       // $f7.preloader.show();
@@ -318,18 +318,25 @@
 
     const closeSignUp = () => {
       // $f7router.back('/login/');
-      console.log($f7.loginScreen.open.length);
-      $f7.loginScreen.close()
-      $f7.loginScreen.close()
+      // console.log($f7.loginScreen.open.length);
+      $f7.loginScreen.close('#root-register-screen', true)
+      $f7.loginScreen.open('#root-login-screen', true);
+
     }
 
   
     // Lifecycle
     $onMounted(() => {
-      // supabase.auth.onAuthStateChange((event, session) => {
-      //   console.log(event, session)
-      // })
-
+    console.log('onMounted App');
+      supabase.auth.onAuthStateChange((event, session) => {
+        console.log('onAuthStateChange')
+        console.log('USER STATUS IS => '+event)
+        if (event==='SIGNED_IN') {
+          console.log(typeof event)
+        } else {
+          $f7.loginScreen.open('#root-login-screen', true);
+        }
+      })
     });
   
     // Return render function

@@ -7,13 +7,13 @@
         <p>Each tab/view may have different layout, different navbar type (dynamic, fixed or static) or without navbar like this tab.</p>
       </div>
       <div class="block-title">Navigation</div>
+      ${session ? $h`
       <div class="block-title">
-        ${session ? $h`
-          ${session.user.email}
-          ` : $h` 
-
-          `}
+        ${session.user.email}
       </div>
+      ` : $h` 
+
+      `}
       
       <div class="list">
         <ul>
@@ -124,7 +124,7 @@
           .then((error)=>{
             console.log(error);
             $f7.progressbar.hide();
-            $f7router.refreshPage()
+            // $f7router.refreshPage()
           });
         },
         function () {

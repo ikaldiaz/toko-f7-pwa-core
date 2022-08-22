@@ -1,53 +1,21 @@
-import ProductPage from '../pages/product.f7';
-import ExCardPage from '../pages/card-ex.f7';
-
-import PanelRight from '../pages/panel-right.f7';
-
-import ScreenLogin from '../pages/screen-login.f7';
-import ScreenRegister from '../pages/screen-register.f7';
-
-import DynamicRoutePage from '../pages/dynamic-route.f7';
-import RequestAndLoad from '../pages/request-and-load.f7';
-import NotFoundPage from '../pages/404.f7';
-
 import MainTab from '../pages/tabs/tabs.f7';
 import TabError from '../pages/tabs/tab-error.f7';
 import Tab1Page from '../pages/tabs/tab-1.f7';
 import Tab2Page from '../pages/tabs/tab-2.f7';
 import Tab3Page from '../pages/tabs/tab-3.f7';
 import Tab4Page from '../pages/tabs/tab-4.f7';
-import TabCatalog from '../pages/tabs/tab-5.f7';
+import TabProducts from '../pages/tabs/tab-5.f7';
 
-// import { supabase } from '@supabase/supabase-js'
-import { supabase, getTable } from '../js/supabase';
+import ProductPage from '../pages/product.f7';
+import ExCardPage from '../pages/card-ex.f7';
 
+import PanelRight from '../pages/panel-right.f7';
 
-// asyncCall();
+import DynamicRoutePage from '../pages/dynamic-route.f7';
+import RequestAndLoad from '../pages/request-and-load.f7';
+import NotFoundPage from '../pages/404.f7';
 
-// async () => {
-//   const { data, error } = await supabase.from('products').select()
-//       console.log(data);
-//       console.log(error);
-//       resolve(
-//         {
-//           component: TabCatalog
-//         },);
-
-//   if(!error) {
-//   app.progressbar.hide();
-//   resolve(
-//     {
-//       component: TabCatalog
-//     },);
-//     console.log('success')
-//   }else{
-//   app.progressbar.hide();
-
-
-//     console.log('error');
-//   }
-// }
-
+import { getTable } from '../js/supabase';
 
 var routes = [
   // {
@@ -109,9 +77,11 @@ var routes = [
       },
       // Test Async Tab
       {
-        path: '/cart-async/',
-        // Load this tab content as a component with Ajax request:
+        path: '/products-async/',
+        //browser url will look like "http://my-webapp.com/#!/products-async.html"
+        //https://www.domain.comk/#!/products-async/
         id: 'tab-5',
+        // Load this tab content as a component with Ajax request:
         async: function ({ router, to, resolve }) {
           // App instance
           var app = router.app;
@@ -119,7 +89,7 @@ var routes = [
           // Show Preloader
           app.progressbar.show('multi');
           // Simulate Ajax Request
-          getTable('products')
+          getTable('products', 'title')
           .then((data) => {
             app.progressbar.hide();
             if (data==false) {
@@ -132,7 +102,7 @@ var routes = [
             } else {
               resolve(
                 {
-                  component: TabCatalog
+                  component: TabProducts
                 },
                 {
                   props: {
@@ -147,40 +117,11 @@ var routes = [
       },
     ],
   },
-  // {
-  //   path: '/logout/',
-  //   beforeEnter: function confirmLogout({ to, from, resolve, reject }) {
-  //     app.f7.dialog.confirm(
-  //       'Are you sure you want to Logout?',
-  //       function () {
-  //         // proceed navigation
-  //         // Show Preloader
-  //         app.f7.progressbar.show('multi');
-  //         signOut()
-  //         .then((error)=>{
-  //           // Hide Preloader
-  //           app.f7.progressbar.hide();
-  //           // app.f7.progressbar.hide();
-  //           // Resolve route to load page
-  //           resolve(
-  //             {
-  //               name: 'home'
-  //             },
-  //           );
-  //         });
-  //       },
-  //       function () {
-  //         // stay on page
-  //         reject();
-  //       }
-  //     )
-  //   }
-  // }, 
   {
     path: '/panel-right/',
     name:'panel-right',
-    //browser url will look like "http://my-webapp.com/#!/quad-eq.html"
-    //https://www.domain.comk/#!/quad-eq/
+    //browser url will look like "http://my-webapp.com/#!/panel-right.html"
+    //https://www.domain.comk/#!/panel-right/
     panel: {
     async: function ({ router, to, resolve }) {
       // App instance
@@ -203,6 +144,8 @@ var routes = [
   },
   {
     path: '/product/:id/',
+    //browser url will look like"
+    //https://www.domain.comk/#!/product/1/
     component: ProductPage,
   },
   {
