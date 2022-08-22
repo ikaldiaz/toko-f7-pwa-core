@@ -1,0 +1,32 @@
+<template>
+    <div class="tab-content">
+      <div class="list links-list">
+        <ul>
+          ${products.map((product) => $h`
+            <li><a href="/product/${product.id}/">${product.title}</a></li>
+          `)}
+        </ul>
+      </div>
+    </div>
+</template>
+<!-- component styles -->
+<style>
+
+</style>
+<!-- rest of component logic -->
+<script>
+  // script must return/export component function
+  export default (props, { $, $f7, $on, $store, $onMounted }) => {
+
+    const products = props.products;
+    console.log(props.products);
+
+    $onMounted(() => {
+      $('.tab-link-5').addClass('tab-link-active')
+      console.log('onMount Tab 5');
+    });
+
+    // component function must return render function
+    return $render;
+  }
+</script>

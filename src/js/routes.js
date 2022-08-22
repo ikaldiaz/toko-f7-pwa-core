@@ -10,12 +10,44 @@ import DynamicRoutePage from '../pages/dynamic-route.f7';
 import RequestAndLoad from '../pages/request-and-load.f7';
 import NotFoundPage from '../pages/404.f7';
 
-
 import MainTab from '../pages/tabs/tabs.f7';
+import TabError from '../pages/tabs/tab-error.f7';
 import Tab1Page from '../pages/tabs/tab-1.f7';
 import Tab2Page from '../pages/tabs/tab-2.f7';
 import Tab3Page from '../pages/tabs/tab-3.f7';
 import Tab4Page from '../pages/tabs/tab-4.f7';
+import TabCatalog from '../pages/tabs/tab-5.f7';
+
+// import { supabase } from '@supabase/supabase-js'
+import { supabase, getTable } from '../js/supabase';
+
+
+// asyncCall();
+
+// async () => {
+//   const { data, error } = await supabase.from('products').select()
+//       console.log(data);
+//       console.log(error);
+//       resolve(
+//         {
+//           component: TabCatalog
+//         },);
+
+//   if(!error) {
+//   app.progressbar.hide();
+//   resolve(
+//     {
+//       component: TabCatalog
+//     },);
+//     console.log('success')
+//   }else{
+//   app.progressbar.hide();
+
+
+//     console.log('error');
+//   }
+// }
+
 
 var routes = [
   // {
@@ -52,7 +84,7 @@ var routes = [
         // Component
         component: Tab3Page
       },
-      // Third tab
+      // Fourth tab
       {
         path: '/cart/',
         // Load this tab content as a component with Ajax request:
@@ -73,6 +105,44 @@ var routes = [
               },
             );
           }, 1000);
+        },
+      },
+      // Test Async Tab
+      {
+        path: '/cart-async/',
+        // Load this tab content as a component with Ajax request:
+        id: 'tab-5',
+        async: function ({ router, to, resolve }) {
+          // App instance
+          var app = router.app;
+          // var app = router.app;
+          // Show Preloader
+          app.progressbar.show('multi');
+          // Simulate Ajax Request
+          getTable('products')
+          .then((data) => {
+            app.progressbar.hide();
+            if (data==false) {
+              resolve(
+                {
+                  name: 'error',
+                  component: TabError
+                },
+              );
+            } else {
+              resolve(
+                {
+                  component: TabCatalog
+                },
+                {
+                  props: {
+                    products: data,
+                  }
+                }
+              );
+            }
+          })
+          
         },
       },
     ],

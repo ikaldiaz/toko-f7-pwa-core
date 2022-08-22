@@ -70,9 +70,21 @@ const signOut = async () => {
   // console.log(session)
 }
 
+async function getTable(tableName) {
+  console.log('Calling from getTable in supabase.js');
+  const { data, error } = await supabase.from(tableName).select()
+  if(!error){
+    console.log('Success getTable in supabase.js ');
+    return data
+  }else{
+    console.log('Error getTable in supabase.js :'+error);
+    return false
+  }
+}
+
 function isEmailAddress(em) {
   let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/; 
   return em.match(pattern) ? true : false;    
 }
 
-export { supabase, signIn, signUp, signOut, isEmailAddress }
+export { supabase, getTable, signIn, signUp, signOut, isEmailAddress }

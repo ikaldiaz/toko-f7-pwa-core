@@ -1,0 +1,23 @@
+<template>
+    <div class="tab-content">
+      <div class="block">Error</div>
+    </div>
+</template>
+<!-- component styles -->
+<style>
+
+</style>
+<!-- rest of component logic -->
+<script>
+  // script must return/export component function
+  export default (props, { $, $f7, $on, $store, $onMounted }) => {
+
+    $onMounted(() => {
+    //   $('.tab-link-5').addClass('tab-link-active')
+      console.log('onMount Tab Error');
+    });
+
+    // component function must return render function
+    return $render;
+  }
+</script>
