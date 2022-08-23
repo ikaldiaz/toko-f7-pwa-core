@@ -41,6 +41,7 @@ export default defineConfig(({ command, mode }) => {
           // 'i18next':['i18next'],
           // 'dateformat':['dateformat'],
           'frameworkX':['framework7'],
+          'supabase':['@supabase/supabase-js'],
         }
       }
     },
