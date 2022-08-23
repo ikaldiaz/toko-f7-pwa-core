@@ -33,7 +33,7 @@ const signOut = async () => {
   // console.log(session)
 }
 
-async function getTable(tableName, order) {
+async function getTableAsync(tableName, order) {
   console.log('Calling from getTable in supabase.js');
   // const { data, error } = await supabase
   // .from('cities')
@@ -94,6 +94,45 @@ async function signUpAsync(em, pass) {
   }
 }
 
+async function getProfile() {
+  try {
+    const user = supabase.auth.user();
+    let { data, error, status } = await supabase
+      .from('profiles')
+      .select(`username`)
+      .eq('id', user.id)
+      .single();
+
+    if (error && status !== 406) {
+      throw error;
+    }
+
+    if (data) {
+      setUsername(data.username);
+    }
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+async function updateProfile() {
+  try {
+    const user = supabase.auth.user();
+    const updates = {
+      id: user.id,
+      username,
+      updated_at: new Date(),
+    };
+
+    let { error } = await supabase.from('profiles').upsert(updates);
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
 /*
 single()
 Retrieves only one row from the result. Result must be one row (e.g. using limit), otherwise this will result in an error.
@@ -119,4 +158,4 @@ function isEmailAddress(em) {
   return em.match(pattern) ? true : false;    
 }
 
-export { supabase, getTable, signInAsync, signUpAsync, signOut, isEmailAddress }
+export { supabase, getTableAsync, signInAsync, signUpAsync, signOut, isEmailAddress }

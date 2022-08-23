@@ -15,7 +15,7 @@ import DynamicRoutePage from '../pages/dynamic-route.f7';
 import RequestAndLoad from '../pages/request-and-load.f7';
 import NotFoundPage from '../pages/404.f7';
 
-import { getTable } from '../js/supabase';
+import { getTableAsync } from '../js/supabase';
 
 var routes = [
   // {
@@ -89,7 +89,7 @@ var routes = [
           // Show Preloader
           app.progressbar.show('multi');
           // Simulate Ajax Request
-          getTable('products', 'title')
+          getTableAsync('products', 'title')
           .then((data) => {
             app.progressbar.hide();
             if (data==false) {
