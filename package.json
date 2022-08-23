@@ -2,7 +2,7 @@
   "name": "mbgae-store",
   "author": "Laksamana Muhammad Haikal Diaz Alejandro",
   "private": false,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Demonstration Framework7 Core PWA with Supabase as Database",
   "license": "MIT",
   "repository": "https://github.com/ikaldiaz/toko-f7-pwa-core",
