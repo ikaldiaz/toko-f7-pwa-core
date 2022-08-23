@@ -2,6 +2,13 @@
 <template>
   <div id="app">
 
+    <!-- <div class="preloader custom-preloader">
+      <span class="preloader-inner">
+        <img src="icons/favicon.png" class="spin" width="100%" height="100%" />
+      </span>
+    </div> -->
+    
+
     <!-- Right panel with reveal effect-->
     <div class="panel panel-right panel-reveal dark">
       <div class="view">
@@ -20,7 +27,9 @@
     </div>
 
     <!-- Your main view, should have "view-main" class -->
-    <div class="view view-main view-init safe-areas" data-url="/"></div>
+    <div class="view view-main view-init safe-areas" data-url="/">
+      
+    </div>
 
     <!-- Popup -->
     <div class="popup" id="my-popup">
@@ -88,11 +97,10 @@
               <div class="list inset block">
                 <ul>
                   <li>
-                    <a href="#" id="signin-button" class="button button-large button-fill 
-                    ${isValidLogin ? '' : 'disabled'} 
-                    button-preloader 
-                    ${isLoading ? 'button-loading' : ''}"
-                     @click="${signIn}">
+                    <a href="#" id="signin-button" class="button button-large button-fill
+                    ${isValidLogin ? '' : 'disabled'}
+                    button-preloader ${isLoading ? 'button-loading' : ''}"
+                    @click="${signIn}">
                      <span class="preloader"></span>
                      <span>Sign In</span>
                     </a>
@@ -174,10 +182,10 @@
               <div class="list inset block">
                 <ul>
                   <li>
-                    <a href="#" id="register-button" class="button button-fill 
-                    ${checkFormSignUp ? '' : 'disabled'} 
-                    button-preloader 
-                    ${isLoading ? 'button-loading' : ''}"
+                    <a href="#" id="register-button" class="button button-fill
+                    ${checkFormSignUp ? '' : 'disabled'}
+                    button-preloader
+                    ${isLoadingSignUp ? 'button-loading' : ''}"
                     @click="${signUp}" >
                     <span class="preloader"></span>
                     <span>Sign Up</span> 
@@ -186,7 +194,7 @@
                 </ul>
                 <div class="block-footer">
                   <p>When you click the Sign Up button, you are agree with our Terms and Condition.</p>
-                  <p><a href="#" class="link" @click="${closeSignUp}">Back to Login Page, not the Future</a></p>
+                  <p><a href="#" class="link" @click="${backToLogin}">Back to Login Page, not the Future</a></p>
                 </div>
               </div>
             </form>
@@ -194,6 +202,8 @@
         </div>
       </div>
     </div>
+
+
   </div>
 </template>
 <style>
@@ -209,10 +219,31 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.custom-preloader{
+  display: contents;
+  position:absolute;
+  z-index: -1;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@keyframes spinning {
+  from { transform: rotate(0deg) }
+  to { transform: rotate(360deg) }
+}
+.spin {
+  animation-name: spinning;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  /* linear | ease | ease-in | ease-out | ease-in-out */
+  animation-timing-function: ease-in-out;
+}
 </style>
 <script>
-  import { supabase, signIn, signUp as signUpSupabase, isEmailAddress } from './js/supabase.js';
-  export default function (props, { $on, $, $f7, $store, $f7router, $onMounted, $update }) {
+  import { supabase, signInAsync, signUpAsync, isEmailAddress } from './js/supabase.js';
+  export default function (props, context) {
+    const { $on, $, $f7, $onMounted, $update } = context;
     // Login screen  
     let usernameLogin = '';
     let passwordLogin = '';
@@ -223,17 +254,17 @@
     let nameSignUp = '';
     let emailSignUp = '';
     let passwordSignUp = '';
+    let isLoadingSignUp = false;
     let checkFormSignUp = false;
     
     const updateUsernameLogin = (e) => {
-      usernameLogin = e.target.value;
+      usernameLogin = e.target.value
       isValidLogin = isEmailAddress(usernameLogin) && passwordLogin.length>8;
       isValidLogin ? $('#signin-button').removeClass('disabled') : $('#signin-button').addClass('disabled');
       $update();
     }
     const updatePasswordLogin = (e) => {
       passwordLogin = e.target.value;
-      
       isValidLogin = isEmailAddress(usernameLogin) && passwordLogin.length>8;
       isValidLogin ? $('#signin-button').removeClass('disabled') : $('#signin-button').addClass('disabled');
       $update();
@@ -260,83 +291,61 @@
 
     
     const signIn = async () => {
-      console.log(usernameLogin)
-      console.log(passwordLogin)
+      $f7.progressbar.show('multi');
+      // console.log(usernameLogin)
+      // console.log(passwordLogin)
 
-
-      isLoading =true;
-      $update()
-      const { user, session, error } = await supabase.auth.signIn({
-        email: usernameLogin,
-        password: passwordLogin,
+      signInAsync(usernameLogin, passwordLogin)
+      .then((output) =>{
+        if(output){
+          $f7.loginScreen.close()
+        }
+        $f7.progressbar.hide();
+        // console.log('out',output);
       })
-          
-
-      if(!error) {
-        isLoading =false;
-        $update()
-        console.log('success')
-        console.log('if not error',user)
-        console.log('if not error',session)
-        $f7.dialog.alert('Hai, ' + user.email, () => {
-          $f7.loginScreen.close();
-          // $f7.router.refreshPage();
-          });
-      }else{
-        isLoading =false;
-        $update()
-        console.log('error');
-        console.log(error);
-      }
-      // console.log(user)
-      // console.log(session)
     }
 
     const closeLogin = () => {
       $f7.loginScreen.close();
-      // $f7.loginScreen.open('#root-login-screen', true);
     }
       
     const signUp = () => {
-      // $f7.preloader.show();
-      isLoading = true;
-      $update();
-
-      
-      signUpSupabase(emailSignUp, passwordSignUp)
-      .then((user) =>{
-        console.log(user);
-        isLoading = false;
-        $update();
-      })
-      .catch((error) => {
-        console.log(error);
-        isLoading = false;
-        $update();
+      $f7.progressbar.show('multi');
+      signUpAsync(emailSignUp, passwordSignUp)
+      .then((output) =>{
+        if (output) {
+          $f7.loginScreen.close('#root-register-screen', true)
+          $f7.loginScreen.close('#root-login-screen', true)
+        }
+        $f7.progressbar.hide();
+        // console.log(output);
       })
     }
 
-    const closeSignUp = () => {
-      // $f7router.back('/login/');
-      // console.log($f7.loginScreen.open.length);
+    const backToLogin = () => {
       $f7.loginScreen.close('#root-register-screen', true)
       $f7.loginScreen.open('#root-login-screen', true);
+    }
 
+    const closeSignUp = () => {
+      $f7.loginScreen.close('#root-register-screen', true)
+      $f7.loginScreen.close('#root-login-screen', true)
     }
 
   
     // Lifecycle
     $onMounted(() => {
-    console.log('onMounted App');
+      // console.log('onMounted App');
       supabase.auth.onAuthStateChange((event, session) => {
-        console.log('onAuthStateChange')
-        console.log('USER STATUS IS => '+event)
+        // console.log('onAuthStateChange')
+        // console.log('USER STATUS IS => '+event)
         if (event==='SIGNED_IN') {
-          console.log(typeof event)
+          // console.log(typeof event)
         } else {
           $f7.loginScreen.open('#root-login-screen', true);
         }
       })
+
     });
   
     // Return render function

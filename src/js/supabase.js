@@ -17,44 +17,7 @@ const supabase = createClient(
   // options
   )
 
-// const session = supabase.auth.session()
 
-const signUp = async (em, pass) => {
-  const { user, session, error } = await supabase.auth.signUp({
-      email: em,
-      password: pass,
-  })
-      
-
-  if(!error) {
-    console.log('success')
-  }else{
-    console.log('error');
-  }
-  return user
-  // console.log(user)
-  // console.log(session)
-}
-
-const signIn = async (em, pass) => {
-  const { user, session, error } = await supabase.auth.signIn({
-    email: em,
-    password: pass,
-  })
-      
-
-  if(!error) {
-    console.log('success')
-  }else{
-    console.log('error');
-  }
-  return user;
-  // console.log(user)
-  // console.log(session)
-}
-
-
-// const { error } = await supabase.auth.signOut()
 
 const signOut = async () => {
   const { error } = await supabase.auth.signOut()
@@ -91,6 +54,46 @@ async function getTable(tableName, order) {
   }
 }
 
+async function signInAsync(em, pass) {
+  try {
+    const { user, session, error } = await supabase.auth.signIn({
+      email: em,
+      password: pass,
+    })
+
+    if(!error) {
+      console.log('supabase user', user);
+      console.log('supabase session', session);
+      return Promise.resolve(user);
+    }else{
+      throw error;
+    }
+  } catch (error) {
+    console.log('catch', error);
+    return false
+  }
+}
+
+async function signUpAsync(em, pass) {
+  try {
+    const { user, session, error } = await supabase.auth.signUp({
+      email: em,
+      password: pass,
+    })
+
+    if(!error) {
+      console.log('supabase user', user);
+      console.log('supabase session', session);
+      return Promise.resolve(user);
+    }else{
+      throw error;
+    }
+  } catch (error) {
+    console.log('catch', error);
+    return false
+  }
+}
+
 /*
 single()
 Retrieves only one row from the result. Result must be one row (e.g. using limit), otherwise this will result in an error.
@@ -116,4 +119,4 @@ function isEmailAddress(em) {
   return em.match(pattern) ? true : false;    
 }
 
-export { supabase, getTable, signIn, signUp, signOut, isEmailAddress }
+export { supabase, getTable, signInAsync, signUpAsync, signOut, isEmailAddress }

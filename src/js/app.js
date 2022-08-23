@@ -87,6 +87,7 @@ var app = new Framework7({
       // console.log('tabHide',params)
     },
     pageInit: function (page) {
+      
 
       console.log('app on pageInit');
       //Localization on Another Page, we have to initialised again.
@@ -98,6 +99,7 @@ var app = new Framework7({
 
     },
     pageMounted:function(page){
+      app.preloader.hideIn('.custom-preloader')
       // console.log(app);
       // console.log(this);
       // console.log('app', 'pageMounted '+page.name);
