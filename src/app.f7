@@ -243,7 +243,7 @@
 <script>
   import { supabase, signInAsync, signUpAsync, isEmailAddress } from './js/supabase.js';
   export default function (props, context) {
-    const { $on, $, $f7, $onMounted, $update } = context;
+    const { $, $f7, $update, $f7router, $on, $onMounted } = context;
     // Login screen  
     let usernameLogin = '';
     let passwordLogin = '';
@@ -298,10 +298,20 @@
       signInAsync(usernameLogin, passwordLogin)
       .then((output) =>{
         if(output){
-          $f7.loginScreen.close()
+          $f7.loginScreen.close('#root-login-screen', true)
+          $f7.progressbar.hide()
+          $f7router.app.views.main.router.navigate('/', {
+            reloadCurrent: true,
+            ignoreCache: false,
+          });
         }
-        $f7.progressbar.hide();
-        // console.log('out',output);
+        
+        $f7.progressbar.hide()
+      }).catch((error)=>{
+        $f7router.app.views.main.router.navigate('/', {
+          reloadCurrent: true,
+          ignoreCache: false,
+        });
       })
     }
 
@@ -314,8 +324,16 @@
       signUpAsync(emailSignUp, passwordSignUp)
       .then((output) =>{
         if (output) {
+          
           $f7.loginScreen.close('#root-register-screen', true)
           $f7.loginScreen.close('#root-login-screen', true)
+          $f7.progressbar.hide()
+
+          $f7router.app.views.main.router.navigate('/', {
+            reloadCurrent: true,
+            ignoreCache: false,
+          });
+
         }
         $f7.progressbar.hide();
         // console.log(output);

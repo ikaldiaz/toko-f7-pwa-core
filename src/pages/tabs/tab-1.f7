@@ -104,7 +104,7 @@
   
   import { supabase, signOut } from '../../js/supabase.js';
   // script must return/export component function
-  export default (props, { $, $f7, $f7router, $on, $onMounted, $update }) => {
+  export default (props, { $, $f7, $update, $f7router, $route, $on, $onMounted }) => {
     const session = supabase.auth.session();
 
     const signinCall = ()=>{
@@ -124,11 +124,19 @@
           .then((error)=>{
             console.log(error);
             $f7.progressbar.hide();
-            // $f7router.refreshPage()
+            // $f7router.refreshPage();
+            $f7router.navigate($f7router.currentRoute.url, {
+              reloadCurrent: true,
+              ignoreCache: false,
+            });
           });
         },
         function () {
           $f7.progressbar.hide();
+          $f7router.navigate($f7router.currentRoute.url, {
+            reloadCurrent: true,
+            ignoreCache: false,
+          });
           // stay on page
         }
       )
