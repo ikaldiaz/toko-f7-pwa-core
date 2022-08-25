@@ -15,7 +15,7 @@ import DynamicRoutePage from '../pages/dynamic-route.f7';
 import RequestAndLoad from '../pages/request-and-load.f7';
 import NotFoundPage from '../pages/404.f7';
 
-import { getTableAsync } from '../js/supabase';
+import { getTableAsync, getProfile } from '../js/supabase';
 
 var routes = [
   // {
@@ -123,22 +123,33 @@ var routes = [
     //browser url will look like "http://my-webapp.com/#!/panel-right.html"
     //https://www.domain.comk/#!/panel-right/
     panel: {
-    async: function ({ router, to, resolve }) {
+    async: function ({ router, to, resolve, reject }) {
       // App instance
       var app = router.app;
-      // Show ProgresBar
+      // var app = router.app;
+      // Show Preloader
       app.progressbar.show('multi');
       // Simulate Ajax Request
-      setTimeout(function () {
-        // Hide ProgressBar
-        app.progressbar.hide(); //hide
-        // Resolve route to load page
-        resolve(
-          {
-            component: PanelRight,
-          }
-        );
-      }, 1800);
+      getProfile()
+      .then((data) => {
+        app.progressbar.hide();
+        if (data==false) {
+          reject();
+        } else {
+          // console.log(data);
+          resolve(
+            {
+              component: PanelRight,
+            },
+            {
+              props: {
+                user: data,
+              }
+            }
+          );
+        }
+      })
+      
     },
     }
   },

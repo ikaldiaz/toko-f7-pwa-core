@@ -21,16 +21,52 @@ const supabase = createClient(
 
 const signOut = async () => {
   const { error } = await supabase.auth.signOut()
-      
 
   if(!error) {
     console.log('success')
   }else{
-    console.log('error');
+    console.error(error);
   }
-  return error;
-  // console.log(user)
-  // console.log(session)
+  return Promise.resolve(error)
+}
+
+const signInAsync = async (em, pass) => {
+  const { user, session, error } = await supabase.auth.signIn({
+    email: em,
+    password: pass,
+  })
+
+  if(!error) {
+    console.log('supabase user', user)
+    console.log('supabase session', session)
+    return Promise.resolve(user)
+  }else{
+    console.error(error.message);
+    return false
+  }
+}
+
+const signUpAsync = async (em, pass, name) => {
+  const { user, session, error } = await supabase.auth.signUp(
+    {
+    email: em,
+    password: pass,
+    },
+    {
+      data: {
+        first_name: name
+      },
+    }
+  )
+
+  if(!error) {
+    console.log('supabase user', user)
+    console.log('supabase session', session)
+    return Promise.resolve(user)
+  }else{
+    console.error(error.message);
+    return false
+  }
 }
 
 async function getTableAsync(tableName, order) {
@@ -54,52 +90,52 @@ async function getTableAsync(tableName, order) {
   }
 }
 
-async function signInAsync(em, pass) {
-  try {
-    const { user, session, error } = await supabase.auth.signIn({
-      email: em,
-      password: pass,
-    })
+// async function signIn(em, pass) {
+//   try {
+//     const { user, session, error } = await supabase.auth.signIn({
+//       email: em,
+//       password: pass,
+//     })
 
-    if(!error) {
-      console.log('supabase user', user);
-      console.log('supabase session', session);
-      return Promise.resolve(user);
-    }else{
-      throw error;
-    }
-  } catch (error) {
-    console.log('catch', error);
-    return false
-  }
-}
+//     if(!error) {
+//       console.log('supabase user', user);
+//       console.log('supabase session', session);
+//       return Promise.resolve(user);
+//     }else{
+//       throw error;
+//     }
+//   } catch (error) {
+//     console.log('catch', error);
+//     return false
+//   }
+// }
 
-async function signUpAsync(em, pass) {
-  try {
-    const { user, session, error } = await supabase.auth.signUp({
-      email: em,
-      password: pass,
-    })
+// async function signUp(em, pass) {
+//   try {
+//     const { user, session, error } = await supabase.auth.signUp({
+//       email: em,
+//       password: pass,
+//     })
 
-    if(!error) {
-      console.log('supabase user', user);
-      console.log('supabase session', session);
-      return Promise.resolve(user);
-    }else{
-      throw error;
-    }
-  } catch (error) {
-    console.log('catch', error);
-    return false
-  }
-}
+//     if(!error) {
+//       console.log('supabase user', user);
+//       console.log('supabase session', session);
+//       return Promise.resolve(user);
+//     }else{
+//       throw error;
+//     }
+//   } catch (error) {
+//     console.log('catch', error);
+//     return false
+//   }
+// }
 
 async function getProfile() {
   try {
     const user = supabase.auth.user();
     let { data, error, status } = await supabase
       .from('profiles')
-      .select(`username`)
+      .select(`firstname`)
       .eq('id', user.id)
       .single();
 
@@ -108,10 +144,11 @@ async function getProfile() {
     }
 
     if (data) {
-      setUsername(data.username);
+      return data
     }
   } catch (error) {
-    alert(error.message);
+    console.error(error.message);
+    return false
   }
 }
 
@@ -127,35 +164,19 @@ async function updateProfile() {
     let { error } = await supabase.from('profiles').upsert(updates);
     if (error) {
       throw error;
+    }else{
+      return false
     }
+
   } catch (error) {
-    alert(error.message);
+    console.error(error.message);
+    return false
   }
 }
-
-/*
-single()
-Retrieves only one row from the result. Result must be one row (e.g. using limit), otherwise this will result in an error.
-
-const { data, error } = await supabase
-  .from('cities')
-  .select('name, country_id')
-  .limit(1)
-  .single()
-
-Examples
-With select()
-const { data, error } = await supabase
-  .from('cities')
-  .select('name, country_id')
-  .limit(1)
-  .single()
-
-  */
 
 function isEmailAddress(em) {
   let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/; 
   return em.match(pattern) ? true : false;    
 }
 
-export { supabase, getTableAsync, signInAsync, signUpAsync, signOut, isEmailAddress }
+export { supabase, signInAsync, signUpAsync, signOut, isEmailAddress, getTableAsync, getProfile }

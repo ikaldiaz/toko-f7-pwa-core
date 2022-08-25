@@ -1,6 +1,7 @@
 
 <template>
   <div id="app">
+    <!-- <div id="conn-header" style="text-align: center;"><i class="icon material-icons">settings</i> not connected</div> -->
 
     <!-- <div class="preloader custom-preloader">
       <span class="preloader-inner">
@@ -308,10 +309,12 @@
         
         $f7.progressbar.hide()
       }).catch((error)=>{
-        $f7router.app.views.main.router.navigate('/', {
-          reloadCurrent: true,
-          ignoreCache: false,
-        });
+        // $f7router.app.views.main.router.navigate('/', {
+          //   reloadCurrent: true,
+          //   ignoreCache: false,
+          // });
+        $f7.progressbar.hide()
+        console.err(error);
       })
     }
 
@@ -321,7 +324,7 @@
       
     const signUp = () => {
       $f7.progressbar.show('multi');
-      signUpAsync(emailSignUp, passwordSignUp)
+      signUpAsync(emailSignUp, passwordSignUp, nameSignUp)
       .then((output) =>{
         if (output) {
           

@@ -9,7 +9,7 @@
       <div class="block-title">Navigation</div>
       ${session ? $h`
       <div class="block-title">
-        ${session.user.email}
+        ${session.user.user_metadata.first_name}
       </div>
       ` : $h` 
 
@@ -90,15 +90,25 @@
           </li>
         </ul>
       </div>
-      
+
+
+
+
     </div>
 </template>
 <!-- component styles -->
-<!-- <style>
+<!--
+ <style>
   .red-link {
     color: red;
   }
-</style> -->
+  .f7-demo-icons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+</style> 
+-->
 <!-- rest of component logic -->
 <script>
   

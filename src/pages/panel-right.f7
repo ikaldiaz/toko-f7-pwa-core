@@ -1,7 +1,7 @@
 <template>
     <div class="panel panel-right panel-reveal dark" data-name="panel-right">
         <div class="view">
-            <div class="page" data-name="home">
+            <div class="page" data-name="right-panel">
                 <div class="navbar">
                     <div class="navbar-bg"></div>
                     <div class="navbar-inner">
@@ -11,14 +11,11 @@
                 
                 <!-- Scrollable Page Content -->
                 <div class="page-content">
-    
-                <div class="block">
-                    
-                </div>
+
                 ${user.email ? $h`
                 <div class="container">
-                    ${user.photoUrl ? $h`
-                        <div style="--bg-img: url('${client.value.photoUrl}')" class="outer">
+                    ${profile.photoUrl ? $h`
+                        <div style="--bg-img: url('${profile.photoUrl}')" class="outer">
                             <div class="inner">
                                 <a href="/popup-img-profile/" class="link color-yellow" id="edit-profile-img">
                                     
@@ -39,18 +36,54 @@
                 </div>
                 ` : $h` `}
     
+                <div class="card">
+                    <div class="card-content">
+                        <div class="list links-list no-ios-edges no-chevron">
+                        <ul>
+                            ${profile.firstname ? $h `
+                            <li><a class="justify-content-center" href="#">${profile.firstname}</a></li>
+                            `: $h` `}
+                            ${user.email ? $h `
+                            <li><a class="justify-content-center" href="#">${user.email}</a></li>
+                            `: $h` `}
+                            ${session ? $h `
+                            <li><a class="justify-content-center" href="#">Logout</a></li>
+                            `: $h` `}
+                        </ul>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="list links-list no-chevron no-hairlines-between no-hairlines">
                 <ul>
                     <!-- Divider -->
-                    <li class="item-divider">Divider title here</li>
+                    <li class="item-divider">Account</li>
                     <!-- Another list items -->
+                    
+                    ${session ? $h `
                     <li>
-                    <a href="#">${user.photoUrl ? $h `${user.photoUrl} `: $h` `}</a>
+                        <a href="#" class="item-link item-content">
+                            <div class="item-media"><i class="material-icons">whatsapp</i></div>
+                            <div class="item-inner">
+                            <div class="item-title">Setting</div>
+                            </div>
+                        </a>
                     </li>
                     <li>
-                    <a href="#">${user.email ? $h `${user.email} `: $h` `}</a>
+                        <a href="#" class="item-link item-content">
+                            <div class="item-media"><i class="material-icons">power</i></div>
+                            <div class="item-inner">
+                            <div class="item-title">Logout</div>
+                            </div>
+                        </a>
                     </li>
+                    `: $h` `}
+
+                    ${user.photoUrl ? $h `
+                    <li>
+                    <a href="#">${user.photoUrl}</a>
+                    </li>
+                    `: $h` `}
                     <li>
                     <a href="#">Link Item 3</a>
                     </li>
@@ -89,7 +122,8 @@ p {
 import { supabase } from '../js/supabase.js';
 export default function (props, {$f7, $store, $on, $update, $onBeforeMount, $onMounted, $onBeforeUnmount, $onUnmounted }) {
     const session = supabase.auth.session();
-    let user = '';
+    let user = ''
+    let profile = props.user
 
     // Lifecycle
     $onBeforeMount(() => {
