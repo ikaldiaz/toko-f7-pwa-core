@@ -26,6 +26,7 @@
   ],
   "dependencies": {
     "@supabase/supabase-js": "^1.35.6",
+    "cropperjs": "^1.5.12",
     "dateformat": "^5.0.3",
     "dom7": "^4.0.4",
     "framework7": "^7.0.7",
@@ -33,6 +34,7 @@
     "i18next": "^21.9.1",
     "jquery": "^3.6.0",
     "jquery-i18next": "^1.2.1",
+    "localforage": "^1.10.0",
     "material-icons": "^1.11.10",
     "skeleton-elements": "^4.0.0",
     "swiper": "^8.3.2"

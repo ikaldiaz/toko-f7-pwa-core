@@ -7,11 +7,14 @@
             <div class="left">
               <img data-src="icons/favicon.png" style="width: 45px;" class="lazy lazy-fade-in demo-lazy" />
             </div>
-            <div class="title">Mbgae Store</div>
+            <div class="title">My Store</div>
             <div class="right">
               <a href="#" class="link icon-only">
                 <i id="conn-status" class="icon f7-icons if-not-md">wifi</i>
                 <i id="conn-status-md" class="icon material-icons if-md">wifi</i>
+              </a>
+              <a href="/cheatsheet/" class="link icon-only">
+                <i class="icon f7-icons">circle_grid_hex</i>
               </a>
               
               ${session ? $h`

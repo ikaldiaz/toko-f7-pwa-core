@@ -1,0 +1,153 @@
+<template>
+    <div class="page" data-name="profile">
+      <!-- Top Navbar -->
+      <div class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner">
+          <div class="left">
+            <a href="#" class="link back">
+              <i class="icon icon-back"></i>
+              <span class="if-not-md">Back</span>
+            </a>
+          </div>
+          <div class="title">Profile</div>
+          <div class="right">
+            <a href="#" class="link">
+                <i class="material-icons">insert_photo</i>
+            </a>
+            <a href="#" class="link">
+                <i class="material-icons">edit</i>
+            </a>
+          </div>
+        </div>
+      </div>
+  
+      
+  
+      <!-- Scrollable page content-->
+      <div class="page-content">
+        
+        ${user.email ? $h`
+            <div class="profile-container">
+                ${profile.avatar_url ? $h`
+                    <div style="--bg-img: url('${profile.avatar_url}')" class="profile-outer">
+                        <div class="profile-inner">
+                            <a href="/popup-img-profile/" class="link color-yellow" id="edit-profile-avatar">
+                                
+                            <i class="material-icons">edit</i>
+                            </a>
+                        </div>
+                    </div>
+                ` : $h`
+                    <div style="--bg-img: url('icons/256x256.png')" class="profile-outer">
+                    </div>
+                `}
+            </div>
+            ` : $h` `}
+
+                
+            <div class="card">
+                <div class="card-content">
+                    <div class="list links-list no-ios-edges no-chevron">
+                    <ul>
+                        ${profile.firstname ? $h `
+                        <li><a class="justify-content-center" href="#">${profile.firstname}</a></li>
+                        `: $h` `}
+                        ${user.email ? $h `
+                        <li><a class="justify-content-center" href="#">${user.email}</a></li>
+                        `: $h` `}
+                        ${session ? $h `
+                        <li><a class="justify-content-center" href="#">Logout</a></li>
+                        `: $h` `}
+                    </ul>
+                    </div>
+                </div>
+            </div>
+        
+        
+      </div>
+    </div>
+  </template>
+  <style>
+.profile-container {
+  width: 250px;
+  height: 230px;
+  display: block;
+  margin: 0 auto;
+  margin-top: 23px;
+  margin-bottom: 23px;
+  }
+
+.profile-outer {
+  width: 100% !important;
+  z-index:11;
+  height: 100% !important;
+  max-width: 187px !important; /* any size */
+  max-height: 187px !important; /* any size */
+  margin: auto;
+  background-color: #06039c;
+  border-radius: 100%;
+  position: relative;
+  background-image: var(--background); 
+  background-image: var(--bg-img);
+  background-repeat: no-repeat;
+  background-position: center center;
+	background-size: 100%;
+  }
+  
+.profile-inner {
+  z-index:10;
+  width: 35px;
+  height: 35px;
+  border-radius: 100%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.profile-inner:hover {
+  background-color: #5555ff;
+}
+
+.profile-inner:after, .profile-inner:before {
+  content: "";
+  background: #06039c;
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  bottom: 0;
+  border-radius: 50% / 22%;
+  }
+
+.profile-inner:before {
+  transform: rotate(-90deg); /* vendor prefixes omitted due to brevity */
+}
+
+#edit-profile-avatar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+  </style>
+  <script>
+  import { supabase} from '../js/supabase.js';
+  export default function (props, {$f7, $store, $on, $update, $onMounted }) {
+    const sp = supabase;
+    const session = supabase.auth.session();
+    let user = ''
+    let profile = props.user
+    
+    $onMounted(() => {
+      console.log('onMount');
+      user = session.user ? session.user : ''
+      $update()
+
+      sp.auth.onAuthStateChange((event, session) => {
+      console.log(event, session)
+      })
+    });
+    return $render;
+  }
+  </script>

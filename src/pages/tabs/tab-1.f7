@@ -42,6 +42,27 @@
           </li>
           `}
           <li>
+            <a href="/profile-static/" class="item-content item-link">
+              <div class="item-inner">
+                <div class="item-title">Profile Static</div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="/profile/" class="item-content item-link">
+              <div class="item-inner">
+                <div class="item-title">Profile</div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="/avatar-edit/?image=bar" class="item-content item-link">
+              <div class="item-inner">
+                <div class="item-title">Edit Avatar</div>
+              </div>
+            </a>
+          </li>
+          <li>
             <a href="/ex-card/1/" class="item-content item-link">
               <div class="item-inner">
                 <div class="item-title">Expandable Card</div>

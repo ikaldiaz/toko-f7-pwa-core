@@ -7,7 +7,12 @@ import Tab4Page from '../pages/tabs/tab-4.f7';
 import TabProducts from '../pages/tabs/tab-5.f7';
 
 import ProductPage from '../pages/product.f7';
+import Cheatsheet from '../pages/cheatsheet-icon.f7';
 import ExCardPage from '../pages/card-ex.f7';
+
+import ProfileStatic from '../pages/profile-dead.f7';
+import Profile from '../pages/profile.f7';
+import AvatarEditor from '../pages/avatar-editor.f7';
 
 import PanelRight from '../pages/panel-right.f7';
 
@@ -15,7 +20,7 @@ import DynamicRoutePage from '../pages/dynamic-route.f7';
 import RequestAndLoad from '../pages/request-and-load.f7';
 import NotFoundPage from '../pages/404.f7';
 
-import { getTableAsync, getProfile } from '../js/supabase';
+import { getTableAsync, getProfile, getPublicProfiles } from '../js/supabase';
 
 var routes = [
   // {
@@ -162,6 +167,98 @@ var routes = [
   {
     path: '/ex-card/:id/',
     component: ExCardPage,
+  },
+  {
+    path: '/cheatsheet/',
+    component: Cheatsheet,
+  },
+  {
+    path: '/profile-static/',
+    async: function ({ router, to, resolve }) {
+      // App instance
+      var app = router.app;
+
+      // Show Preloader
+      app.progressbar.show('multi');
+
+      // User ID from request
+      var userId = to.params.userId;
+
+      // Simulate Ajax Request
+      setTimeout(function () {
+        // We got user data from request
+        var user = {
+          firstName: 'Vladimir',
+          lastName: 'Kharlampidi',
+          about: 'Hello, i am creator of Framework7! Hope you like it!',
+          links: [
+            {
+              title: 'Framework7 Website',
+              url: 'http://framework7.io',
+            },
+            {
+              title: 'Framework7 Forum',
+              url: 'http://forum.framework7.io',
+            },
+          ]
+        };
+        // Hide Preloader
+        app.progressbar.hide();
+
+        // Resolve route to load page
+        resolve(
+          {
+            component: ProfileStatic,
+          },
+          {
+            props: {
+              user: user,
+            }
+          }
+        );
+      }, 1000);
+    },
+  },
+  {
+    path: '/profile/',
+    async: function ({ router, to, resolve, reject }) {
+      // App instance
+      var app = router.app;
+      // Show Preloader
+      app.progressbar.show('multi');
+      // Simulate Request
+      getPublicProfiles()
+      .then((data) => {
+        app.progressbar.hide();
+        if (!data) {
+          reject();
+        } else {
+          console.log(data);
+          resolve(
+            {
+              component: Profile,
+            },
+            {
+              props: {
+                user: data,
+              }
+            }
+          );
+        }
+      })
+
+    },
+  },
+  // Load Popup from component file
+  {
+    name:'avatar-editor',
+    path: '/avatar-editor/:imageId/',
+    popup: {
+      component: AvatarEditor,
+      /* popup-component.html contains:
+        
+      */
+    },
   },
   {
     path: '/dynamic-route/blog/:blogId/post/:postId/',

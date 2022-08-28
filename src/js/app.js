@@ -15,6 +15,9 @@ import '../css/framework7-custom.less';
 import '../css/icons.css';
 import '../css/app.less';
 
+// Import Cropper Styles
+import '../css/cropper.min.css';
+
 
 // Import Routes
 import routes from './routes.js';

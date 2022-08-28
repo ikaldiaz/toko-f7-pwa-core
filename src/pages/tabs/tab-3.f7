@@ -243,6 +243,10 @@
           </li>
         </ul>
       </div>
+
+      
+
+
     </div>
 </template>
 <!-- component styles -->
@@ -256,9 +260,23 @@
   // script must return/export component function
   export default (props, { $, $f7, $on, $onMounted }) => {
 
+    
+    
+
+
+    // // Get a reference to the file input element
+    // const inputElement = document.querySelector('input[type="file"]');
+    // // Create a FilePond instance
+    // const pond = FilePond.create(inputElement);
+
     $onMounted(() => {
       $('.tab-link-3').addClass('tab-link-active')
-      console.log('onMount Tab 3');
+      // console.log('onMount Tab 3');
+
+      
+
+
+
     });
 
     $on('click', () => {

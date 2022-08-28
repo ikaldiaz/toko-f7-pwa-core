@@ -1,0 +1,110 @@
+<template>
+    <div class="page" data-name="profile">
+      <!-- Top Navbar -->
+      <div class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner">
+          <div class="left">
+            <a href="#" class="link back">
+              <i class="icon icon-back"></i>
+              <span class="if-not-md">Back</span>
+            </a>
+          </div>
+          <div class="title">Profile</div>
+          <div class="right">
+            <a href="#" class="link" @click="${clickInputFile}">
+                <i class="material-icons">insert_photo</i>
+            </a>
+            <a href="#" class="link">
+                <i class="material-icons">edit</i>
+            </a>
+          </div>
+        </div>
+      </div>
+  
+      
+  
+      <!-- Scrollable page content-->
+      <div class="page-content">
+        <div class="block">
+            <input class="display-none" type="file" name="foto" id="input-avatar" />
+        </div>
+        
+        
+      </div>
+    </div>
+  </template>
+  <script>
+  export default function (props, { $, $f7, $f7router, $store, $on, $update, $onMounted }) {
+    //<a href="/avatar-edit/?image=bar" class="link">
+
+    const clickInputFile = ()=>{
+        $('#input-avatar').click()
+        // $f7router.navigate({
+        //     name: 'avatar-editor',
+        //     query: { imageBlob: 'Base64Image'},
+        //     params: { imageId: 1},
+        // });
+    }
+    const changeStatus = (status) => {
+      // document.getElementById('status').innerHTML = status;
+      console.log(status);
+    }
+
+    const setProgress = (e) => {
+      const fr = e.target;
+      const loadingPercentage = 100 * e.loaded / e.total;
+
+      // document.getElementById('progress-bar').value = loadingPercentage;
+      console.log(loadingPercentage);
+    }
+
+    const loaded = (e) => {
+      const fr = e.target;
+      let result = fr.result;
+
+      changeStatus('Finished Loading!');
+      console.log('Result:', result);
+    }
+
+    const errorHandler = (e) => {
+      changeStatus('Error: ' + e.target.error.name);
+    }
+
+    const processFile = (file) => {
+      const fr = new FileReader();
+
+      fr.readAsDataURL(file);
+      fr.addEventListener('loadstart', changeStatus('Start Loading'));
+      fr.addEventListener('load', changeStatus('Loaded'));
+      fr.addEventListener('loadend', loaded);
+      fr.addEventListener('progress', setProgress);
+      fr.addEventListener('error', errorHandler);
+      fr.addEventListener('abort', changeStatus('Interrupted'));
+      
+    }
+
+    $onMounted(() => {
+    //   console.log('onMounted');
+    });
+
+    $on('pageInit', (e, page) => {
+        // do something on page init
+
+        $('#input-avatar').on('change', function (e) {
+          console.log('input value changed');
+          const file = this.files[0];
+          console.log(file);
+
+          if (file) {
+            processFile(file);
+          }
+        })
+    });
+
+    
+
+
+    return $render;
+  }
+  </script>

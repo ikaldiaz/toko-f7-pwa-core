@@ -1,0 +1,220 @@
+<template>
+    <!-- And somewhere in DOM -->
+    <div class="popup my-popup">
+        <div class="view">
+        <div class="page">
+            <div class="navbar">
+            <div class="navbar-bg"></div> 
+            <div class="navbar-inner">
+                <div class="left">
+                    <!-- Link to close popup -->
+                    <a class="link popup-close">Close</a>
+                </div>
+                <div class="title">Popup</div>
+                <div class="right">
+                    <a class="link" @click="${cropCall}">Crop</a>
+                </div>
+            </div>
+            </div>
+            <!-- <div id="bigfixedblock">
+                <p>
+                This is a big fixed content block.  It should remain fixed, even when page-content scrolls past the height of the viewport.
+                </p>
+            </div> -->
+            <div class="page-content dark">
+                <div class="display-none block">
+                    <input type="file" id="file-input"/>
+                </div>
+                
+                <!-- <div class="block"> -->
+                    <div class="avatar-container">
+                        <img id="avatar" src="icons/512x512.png"/>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </div>
+        </div>
+    </div>
+</template>
+<style>
+/* Ensure the size of the image fit the container perfectly */
+img {
+  display: block;
+
+  /* This rule is very important, please don't ignore this */
+  max-width: 100%;
+}
+
+</style>
+<script>
+import { avatarForage } from '../js/localforage.js'
+import Cropper from 'cropperjs';
+export default function (props, { $, $f7, $f7route, $store, $on, $onMounted, $onUnmounted }) {
+    console.log($f7route.query.imageBlob)
+    let avatarsrc = $f7route.query.imageBlob
+    let cropper
+
+    let options = {
+        aspectRatio: 1 / 1,
+        viewMode : 2,
+        responsive: false,
+        ready: function(e) {
+        // console.log('ready', e.type);
+        },
+        cropstart: function(e) {
+        // console.log(e.type, e.detail.action);
+        },
+        cropmove: function(e) {
+        // console.log(e.type, e.detail.action);
+        },
+        cropend: function(e) {
+        // console.log(e.type, e.detail.action);
+        },
+        crop: function(e) {
+            let data = e.detail;
+            // console.log(e);
+            // console.log(e.type);
+            // console.log(e.detail.x);
+            // console.log(e.detail.y);
+            // console.log(e.detail.width);
+            // console.log(e.detail.height);
+            // console.log(e.detail.rotate);
+            // console.log(e.detail.scaleX);
+            // console.log(e.detail.scaleY);
+
+        },
+        zoom: function(e) {
+        // console.log(e.type, e.detail.ratio);
+        }
+    };
+
+    const cropCall  = () =>{
+        console.log('calling cropped');
+
+        let croppedImageDataURL = cropper.getCroppedCanvas({
+                                width: 512,
+                                height: 512,
+                                minWidth: 512,
+                                minHeight: 512,
+                                maxWidth: 768,
+                                maxHeight: 768,
+                                fillColor: '#ffffff',
+                                imageSmoothingEnabled: false,
+                                imageSmoothingQuality: 'high',
+                                }).toDataURL('image/png'); 
+
+        // console.log(croppedImageDataURL)
+
+        // Create dynamic Sheet
+        var dynamicSheet = $f7.sheet.create({
+            content: `
+            <div class="sheet-modal">
+                <div class="toolbar">
+                <div class="toolbar-inner">
+                    <div class="left"></div>
+                    <div class="right">
+                    <a class="link sheet-close">Done</a>
+                    </div>
+                </div>
+                </div>
+                <div class="sheet-modal-inner">
+                <div class="block">
+                    <img src="`+croppedImageDataURL+`"/>
+                    <p>Sheet created dynamically.</p>
+                    <p><a href="#" class="link sheet-close">Close me</a></p>
+                </div>
+                </div>
+            </div>
+            `,
+            // Events
+            on: {
+            open: function (sheet) {
+                console.log('Sheet open');
+            },
+            opened: function (sheet) {
+                console.log('Sheet opened');
+            },
+            }
+        });
+        // Events also can be assigned on instance later
+        dynamicSheet.on('close', function (sheet) {
+            console.log('Sheet close');
+        });
+        dynamicSheet.on('closed', function (sheet) {
+            console.log('Sheet closed');
+        });
+
+        // Open dynamic sheet
+        dynamicSheet.open();
+
+
+        // cropper.getCroppedCanvas();
+
+        // cropper.getCroppedCanvas({
+        // width: 160,
+        // height: 90,
+        // minWidth: 256,
+        // minHeight: 256,
+        // maxWidth: 4096,
+        // maxHeight: 4096,
+        // fillColor: '#fff',
+        // imageSmoothingEnabled: false,
+        // imageSmoothingQuality: 'high',
+        // });
+
+        // // Upload cropped image to server if the browser supports `HTMLCanvasElement.toBlob`.
+        // // The default value for the second parameter of `toBlob` is 'image/png', change it if necessary.
+        // cropper.getCroppedCanvas().toBlob((blob) => {
+        // const formData = new FormData();
+
+        // // Pass the image file name as the third parameter if necessary.
+        // formData.append('croppedImage', blob/*, 'example.png' */);
+
+        // // Use `jQuery.ajax` method for example
+        // $.ajax('/path/to/upload', {
+        //     method: 'POST',
+        //     data: formData,
+        //     processData: false,
+        //     contentType: false,
+        //     success() {
+        //     console.log('Upload success');
+        //     },
+        //     error() {
+        //     console.log('Upload error');
+        //     },
+        // });
+        // }/*, 'image/png' */);
+    }
+    
+    
+
+    $onMounted(() => {
+        console.log('onMount');
+        const image = document.getElementById('avatar');
+
+        avatarForage.ready().then(function() {
+            console.log(avatarForage.driver()); // LocalStorage
+            avatarForage.getItem('img').then(function(value) {
+                $('#avatar').attr('src', value);
+                // console.log(value);
+                cropper = new Cropper(image, options);
+
+
+            }).catch(function(err) {
+                console.err('Forage',err);
+            });
+        }).catch(function (e) {
+            console.err('Forage not ready',e); 
+        });
+
+
+    });
+
+    $onUnmounted(()=>{
+        cropper.destroy()
+        console.log('destroyed');
+    })
+
+    return $render;
+}
+</script>

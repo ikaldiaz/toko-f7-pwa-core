@@ -174,9 +174,31 @@ async function updateProfile() {
   }
 }
 
+
+const getPublicProfiles = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("id, firstname, username, avatar_url, website, updated_at")
+      .order("updated_at", { ascending: false })
+      .single();
+
+    if (error || !data) {
+      throw error || new Error("No data");
+    }
+    console.log("Public profiles:", data)
+    return data
+    // setProfiles(data);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log("error", error.message);
+    }
+  }
+}
+
 function isEmailAddress(em) {
   let pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/; 
   return em.match(pattern) ? true : false;    
 }
 
-export { supabase, signInAsync, signUpAsync, signOut, isEmailAddress, getTableAsync, getProfile }
+export { supabase, signInAsync, signUpAsync, signOut, isEmailAddress, getTableAsync, getProfile, getPublicProfiles }

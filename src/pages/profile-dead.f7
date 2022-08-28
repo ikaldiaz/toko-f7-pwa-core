@@ -1,0 +1,169 @@
+<template>
+    <div class="page" data-name="profile">
+      <!-- Top Navbar -->
+      <div class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner">
+          <div class="left">
+            <a href="#" class="link back">
+              <i class="icon icon-back"></i>
+              <span class="if-not-md">Back</span>
+            </a>
+          </div>
+          <div class="title">Profile</div>
+          <div class="right">
+            <a href="#" class="link" @click="${clickInputFile}">
+                <i class="material-icons">insert_photo</i>
+                <!-- <div class="preloader color-white"></div> -->
+            </a>
+            <a href="#" class="link">
+                <i class="material-icons">edit</i>
+            </a>
+          </div>
+        </div>
+      </div>
+  
+      
+  
+      <!-- Scrollable page content-->
+      <div class="page-content">
+        <p id="determinate-container">
+        </p>
+        <div class="block">
+          <input class="display-none" type="file" name="foto" id="input-avatar"/>
+        </div>
+        
+        
+      </div>
+    </div>
+</template>
+<script>
+  import { avatarForage } from '../js/localforage.js'
+  export default function (props, { $, $f7, $f7router, $store, $on, $update, $onMounted }) {
+    //<a href="/avatar-edit/?image=bar" class="link">
+    let progressFile = 0;
+    let progressBarEl;
+
+    const clickInputFile = (e)=>{
+        $('#input-avatar').click()
+        // $f7router.navigate({
+        //     name: 'avatar-editor',
+        //     query: { imageBlob: 'Base64Image'},
+        //     params: { imageId: 1},
+        // });
+    }
+
+  // const updateFileInput = (e) => {
+  //   console.log('input value changed');
+  //   console.log(file)
+  //   const file = e.target.files[0];
+  //   progressBarEl = $f7.progressbar.show('#determinate-container', 0, 'red');
+        
+  //     if (file) {
+  //       processFile(e);
+  //       console.log(file);
+  //     }
+  // } 
+
+  const changeStatus = (status) => {
+    // document.getElementById('status').innerHTML = status;
+    console.log(status);
+  }
+
+  const setProgress = (e) => {
+    const fr = e.target
+    const loadingPercentage = 100 * e.loaded / e.total
+    progressFile = loadingPercentage
+    $update
+    $f7.progressbar.set(progressBarEl, progressFile);
+
+    // document.getElementById('progress-bar').value = loadingPercentage;
+    console.log(loadingPercentage);
+  }
+
+  const loadStart = (e)=>{
+    avatarForage.clear().then(function() {
+    // Run this code once the database has been entirely deleted.
+    console.log('Database is now empty.');
+    }).catch(function(err) {
+        // This code runs if there were any errors
+        console.err(err);
+    });
+  }
+
+  const loaded = (e) => {
+    const fr = e.target;
+    let result = fr.result;
+
+    changeStatus('Successs, Finished Loading!');
+    $f7.progressbar.hide(progressBarEl);
+    // console.log('Result:', result);
+    avatarForage.setItem('img', result)
+    .then(()=>{
+      $f7router.navigate({
+        name: 'avatar-editor',
+        query: { imageBlob: 'Base64Image'},
+        params: { imageId: 1},
+      });
+    })
+    .catch(function(err) {
+    // This code runs if there were any errors
+    console.err(err);
+});;
+  }
+
+  const errorHandler = (e) => {
+    changeStatus('Error: ' + e.target.error.name);
+  }
+
+  const processFile = (file) => {
+    const fr = new FileReader();
+
+    fr.addEventListener('loadstart', changeStatus('Start Loading'));
+    fr.addEventListener('load', changeStatus('Loaded'));
+    fr.addEventListener('loadend', loaded);
+    fr.addEventListener('progress', setProgress);
+    fr.addEventListener('error', errorHandler);
+    fr.addEventListener('abort', changeStatus('Interrupted'));
+    fr.readAsDataURL(file);
+    
+  }
+
+    $onMounted(() => {
+    //   console.log('onMounted');
+    });
+
+    $on('pageInit', (e, page) => {
+        // do something on page init
+
+        avatarForage.ready().then(function() {
+            // This code runs once localforage
+            // has fully initialized the selected driver.
+            console.log(avatarForage.driver()); // LocalStorage
+        }).catch(function (e) {
+            console.log(e); // `No available storage method found.`
+            // One of the cases that `ready()` rejects,
+            // is when no usable storage driver is found
+        });
+
+        $('#input-avatar').on('change', function (e) {
+          console.log('input value changed');
+          const file = e.target.files[0];
+          // progressBarEl = $f7.progressbar.show('#determinate-container', 45, 'blue');
+          
+          if (file) {
+            console.log(file.size)
+            if (file.size<2000000) {
+              processFile(file)
+            }
+            $f7.progressbar.hide(progressBarEl);
+          }
+        })
+    });
+
+    
+
+
+    return $render;
+  }
+</script>

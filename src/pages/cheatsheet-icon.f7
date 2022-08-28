@@ -4,10 +4,13 @@
       <div class="navbar">
         <div class="navbar-bg"></div>
         <div class="navbar-inner">
-          <div class="left">
-            <img data-src="icons/favicon.png" style="width: 45px;" class="lazy lazy-fade-in demo-lazy" />
-          </div>
-          <div class="title">Icon Cheatsheet</div>
+            <div class="left">
+                <a href="#" class="link back">
+                <i class="icon icon-back"></i>
+                <span class="if-not-md">Back</span>
+                </a>
+            </div>
+            <div class="title">Icon Cheatsheet</div>
         </div>
       </div>
   
