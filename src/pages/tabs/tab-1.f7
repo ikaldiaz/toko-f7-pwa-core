@@ -150,11 +150,11 @@
       $f7.dialog.confirm(
         'Are you sure you want to Logout?',
         function () {
-          $f7.progressbar.show('multi');
+          $f7.preloader.show();
           signOut()
           .then((error)=>{
             console.log(error);
-            $f7.progressbar.hide();
+            $f7.preloader.hide();
             // $f7router.refreshPage();
             $f7router.navigate($f7router.currentRoute.url, {
               reloadCurrent: true,
@@ -163,7 +163,7 @@
           });
         },
         function () {
-          $f7.progressbar.hide();
+          $f7.preloader.hide();
           $f7router.navigate($f7router.currentRoute.url, {
             reloadCurrent: true,
             ignoreCache: false,

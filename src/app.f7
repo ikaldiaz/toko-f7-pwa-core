@@ -243,6 +243,7 @@
 </style>
 <script>
   import { supabase, signInAsync, signUpAsync, isEmailAddress } from './js/supabase.js';
+  import { appForage, avatarForage } from './js/localforage.js';
   export default function (props, context) {
     const { $, $f7, $update, $f7router, $on, $onMounted } = context;
     // Login screen  
@@ -299,6 +300,14 @@
       signInAsync(usernameLogin, passwordLogin)
       .then((output) =>{
         if(output){
+          console.log('output session from app ', output)
+          
+          avatarForage.setItem('user', output).then(function(value) {
+              console.log(value);
+          }).catch(function(err) {
+              console.error(err);
+          });
+
           $f7.loginScreen.close('#root-login-screen', true)
           $f7.progressbar.hide()
           $f7router.app.views.main.router.navigate('/', {

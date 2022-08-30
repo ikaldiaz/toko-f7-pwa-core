@@ -38,11 +38,14 @@
     </div>
 </template>
 <script>
-  import { avatarForage } from '../js/localforage.js'
+  import { avatarForage, appForage } from '../js/localforage.js'
   export default function (props, { $, $f7, $f7router, $store, $on, $update, $onMounted }) {
     //<a href="/avatar-edit/?image=bar" class="link">
     let progressFile = 0;
     let progressBarEl;
+
+    const sessionX = appForage.getItem('profile')
+    console.log('session from Forage',sessionX);
 
     const clickInputFile = (e)=>{
         $('#input-avatar').click()
@@ -78,13 +81,13 @@
     $f7.progressbar.set(progressBarEl, progressFile);
 
     // document.getElementById('progress-bar').value = loadingPercentage;
-    console.log(loadingPercentage);
+    // console.log(loadingPercentage);
   }
 
   const loadStart = (e)=>{
     avatarForage.clear().then(function() {
     // Run this code once the database has been entirely deleted.
-    console.log('Database is now empty.');
+      // console.log('Database is now empty.');
     }).catch(function(err) {
         // This code runs if there were any errors
         console.err(err);
@@ -108,8 +111,8 @@
     })
     .catch(function(err) {
     // This code runs if there were any errors
-    console.err(err);
-});;
+      // console.err(err);
+    });
   }
 
   const errorHandler = (e) => {
@@ -139,20 +142,20 @@
         avatarForage.ready().then(function() {
             // This code runs once localforage
             // has fully initialized the selected driver.
-            console.log(avatarForage.driver()); // LocalStorage
+            // console.log(avatarForage.driver()); // LocalStorage
         }).catch(function (e) {
-            console.log(e); // `No available storage method found.`
+            console.err(e); // `No available storage method found.`
             // One of the cases that `ready()` rejects,
             // is when no usable storage driver is found
         });
 
         $('#input-avatar').on('change', function (e) {
-          console.log('input value changed');
+          // console.log('input value changed');
           const file = e.target.files[0];
           // progressBarEl = $f7.progressbar.show('#determinate-container', 45, 'blue');
           
           if (file) {
-            console.log(file.size)
+            // console.log(file.size)
             if (file.size<2000000) {
               processFile(file)
             }

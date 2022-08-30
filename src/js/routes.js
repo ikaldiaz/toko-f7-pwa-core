@@ -20,7 +20,7 @@ import DynamicRoutePage from '../pages/dynamic-route.f7';
 import RequestAndLoad from '../pages/request-and-load.f7';
 import NotFoundPage from '../pages/404.f7';
 
-import { getTableAsync, getProfile, getPublicProfiles } from '../js/supabase';
+import { getProductsAsync, getProfile, getPublicProfiles } from '../js/supabase';
 
 var routes = [
   // {
@@ -94,7 +94,7 @@ var routes = [
           // Show Preloader
           app.progressbar.show('multi');
           // Simulate Ajax Request
-          getTableAsync('products', 'title')
+          getProductsAsync()
           .then((data) => {
             app.progressbar.hide();
             if (data==false) {
@@ -245,6 +245,9 @@ var routes = [
             }
           );
         }
+      })
+      .catch((e) =>{
+        console.error(e);
       })
 
     },

@@ -43,21 +43,27 @@ img {
 
   /* This rule is very important, please don't ignore this */
   max-width: 100%;
+  max-height:90vh !important
+  /* height: 90%; */
 }
 
 </style>
 <script>
 import { avatarForage } from '../js/localforage.js'
 import Cropper from 'cropperjs';
-export default function (props, { $, $f7, $f7route, $store, $on, $onMounted, $onUnmounted }) {
+export default function (props, { $, $f7, $f7route, $store, $on, $onMounted, $onBeforeUnmount, $onUnmounted }) {
     console.log($f7route.query.imageBlob)
     let avatarsrc = $f7route.query.imageBlob
     let cropper
+    let dynamicSheet
 
     let options = {
         aspectRatio: 1 / 1,
         viewMode : 2,
-        responsive: false,
+        // responsive: true,
+        // minCanvasHeight:0,
+        autoCropArea: 1,
+        center: true,
         ready: function(e) {
         // console.log('ready', e.type);
         },
@@ -85,29 +91,69 @@ export default function (props, { $, $f7, $f7route, $store, $on, $onMounted, $on
         },
         zoom: function(e) {
         // console.log(e.type, e.detail.ratio);
+        },
+        destroy: function(e) {
+            console.log('cropper destroyed')
+        // console.log(e.type, e.detail.ratio);
         }
     };
 
     const cropCall  = () =>{
         console.log('calling cropped');
-
-        let croppedImageDataURL = cropper.getCroppedCanvas({
-                                width: 512,
-                                height: 512,
-                                minWidth: 512,
-                                minHeight: 512,
-                                maxWidth: 768,
-                                maxHeight: 768,
-                                fillColor: '#ffffff',
-                                imageSmoothingEnabled: false,
-                                imageSmoothingQuality: 'high',
-                                }).toDataURL('image/png'); 
+        let cropOptions = { width: 512,
+                            height: 512,
+                            minWidth: 512,
+                            minHeight: 512,
+                            maxWidth: 768,
+                            maxHeight: 768,
+                            fillColor: '#ffffff',
+                            imageSmoothingEnabled: true,
+                            imageSmoothingQuality: 'high',
+                            }
+        let croppedImageDataURL = cropper.getCroppedCanvas(cropOptions).toDataURL('image/png'); 
 
         // console.log(croppedImageDataURL)
+        let contentX = `
+            <div class="sheet-modal my-sheet-swipe-to-step" style="height:auto; --f7-sheet-bg-color: #fff;">
+                <div class="sheet-modal-inner">
+                <div class="sheet-modal-swipe-step">
+                    <div class="display-flex padding justify-content-space-between align-items-center">
+                    <div style="font-size: 18px"><b>Total:</b></div>
+                    <div style="font-size: 22px"><b>$500</b></div>
+                    </div>
+                    <div class="padding-horizontal padding-bottom">
+                    <a class="button button-large button-fill">Make Payment</a>
+                    <div class="margin-top text-align-center">Swipe up for more details</div>
+                    </div>
+                </div>
+                <div class="block-title block-title-medium margin-top">Your order:</div>
+                <div class="list no-hairlines">
+                    <ul>
+                    <li class="item-content">
+                        <div class="item-inner">
+                        <div class="item-title">Item 1</div>
+                        <div class="item-after text-color-black"><b>$200</b></div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                        <div class="item-title">Item 2</div>
+                        <div class="item-after text-color-black"><b>$180</b></div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-inner">
+                        <div class="item-title">Delivery</div>
+                        <div class="item-after text-color-black"><b>$120</b></div>
+                        </div>
+                    </li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+        `
 
-        // Create dynamic Sheet
-        var dynamicSheet = $f7.sheet.create({
-            content: `
+        let contentY = `
             <div class="sheet-modal">
                 <div class="toolbar">
                 <div class="toolbar-inner">
@@ -125,23 +171,44 @@ export default function (props, { $, $f7, $f7route, $store, $on, $onMounted, $on
                 </div>
                 </div>
             </div>
-            `,
+            `
+
+            let contentZ = `
+            <div class="sheet-modal my-sheet-swipe-to-step" style="height:auto; --f7-sheet-bg-color: #fff;">
+                <div class="sheet-modal-inner">
+                <div class="sheet-modal-swipe-step">
+                    <div class="block text-align-center">
+                        <img src="`+croppedImageDataURL+`"/>
+                    </div>
+                    <div class="margin-top text-align-center">Tarik ke atas untuk melanjutkan</div>
+                    </div>
+                </div>
+                <div class="block-title block-title-medium margin-top"></div>
+                <div class="padding-horizontal padding-bottom">
+                    <a class="button button-large button-fill">Simpan</a>
+                    </div>
+                </div>
+            </div>
+        `
+
+        // Create dynamic Sheet
+        dynamicSheet = $f7.sheet.create({
+            content: contentZ,
+            swipeToClose: true,
+            swipeToStep: true,
+            backdrop: true,
             // Events
             on: {
-            open: function (sheet) {
-                console.log('Sheet open');
-            },
-            opened: function (sheet) {
-                console.log('Sheet opened');
-            },
+                open: function (sheet) {
+                    console.log('Sheet open', sheet);
+                },
+                opened: function (sheet) {
+                    console.log('Sheet opened', sheet);
+                },
+                destroy: function (sheet) {
+                    console.log('Sheet destroyed', sheet);
+                },
             }
-        });
-        // Events also can be assigned on instance later
-        dynamicSheet.on('close', function (sheet) {
-            console.log('Sheet close');
-        });
-        dynamicSheet.on('closed', function (sheet) {
-            console.log('Sheet closed');
         });
 
         // Open dynamic sheet
@@ -193,12 +260,11 @@ export default function (props, { $, $f7, $f7route, $store, $on, $onMounted, $on
         const image = document.getElementById('avatar');
 
         avatarForage.ready().then(function() {
-            console.log(avatarForage.driver()); // LocalStorage
+            // console.log(avatarForage.driver()); // LocalStorage
             avatarForage.getItem('img').then(function(value) {
                 $('#avatar').attr('src', value);
                 // console.log(value);
                 cropper = new Cropper(image, options);
-
 
             }).catch(function(err) {
                 console.err('Forage',err);
@@ -207,13 +273,21 @@ export default function (props, { $, $f7, $f7route, $store, $on, $onMounted, $on
             console.err('Forage not ready',e); 
         });
 
+        
+
 
     });
 
     $onUnmounted(()=>{
         cropper.destroy()
+        // dynamicSheet.destroy()
         console.log('destroyed');
     })
+
+    // $onBeforeUnmount(()=>{
+        
+    //     console.log('onBeforeUnmount');
+    // })
 
     return $render;
 }

@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { appForage, avatarForage } from '../js/localforage';
 
 const options = {
   schema: 'public',
@@ -21,6 +22,9 @@ const supabase = createClient(
 
 const signOut = async () => {
   const { error } = await supabase.auth.signOut()
+  avatarForage.dropInstance().then(function() {
+    console.log('Dropped the store of the current instance Avatar');
+  });
 
   if(!error) {
     console.log('success')
@@ -38,7 +42,8 @@ const signInAsync = async (em, pass) => {
 
   if(!error) {
     console.log('supabase user', user)
-    console.log('supabase session', session)
+    console.log('supabase session from signInAsync', session)
+
     return Promise.resolve(user)
   }else{
     console.error(error.message);
@@ -69,24 +74,33 @@ const signUpAsync = async (em, pass, name) => {
   }
 }
 
-async function getTableAsync(tableName, order) {
-  console.log('Calling from getTable in supabase.js');
-  // const { data, error } = await supabase
-  // .from('cities')
-  // .select('name, country_id')
-  // .order('id', { ascending: false })
-
-  const { data, error } = await supabase
-  .from(tableName)
+async function getProductsAsync() {
+  // console.log('Calling from getTable in supabase.js');
+  const { data, error, status } = await supabase
+  .from('products')
   .select()
-  .order(order, { ascending: true })
+  .order('title', { ascending: true })
+
+  if (data) {
+    // console.log('data not null');
+    appForage.setItem('products', data).then(function(value) {
+        // console.log(value);
+    }).catch(function(err) {
+        console.error(err);
+    });
+  } else {
+    // console.log('no data');
+  }
+
 
   if(!error){
-    console.log('Success getTable in supabase.js ');
+    // console.log('Status -> '+status);
+    // console.log('Success getTable in supabase.js ');
     return data
   }else{
-    console.log('Error getTable in supabase.js :'+error);
-    return false
+    // console.error('Error getTable in supabase.js :'+error.message);
+    console.error('Status -> '+status);
+    return appForage.getItem('products') ? appForage.getItem('products') : false
   }
 }
 
@@ -174,24 +188,65 @@ async function updateProfile() {
   }
 }
 
-
 const getPublicProfiles = async () => {
-  try {
-    const { data, error } = await supabase
+
+    const user = supabase.auth.user()
+    const { data, error, status } = await supabase
       .from("profiles")
       .select("id, firstname, username, avatar_url, website, updated_at")
+      .eq('id', user.id)
       .order("updated_at", { ascending: false })
       .single();
 
+      console.log(status);
+
+    if(data){
+      avatarForage.setItem('profile', data).then(function(value) {
+        console.log(value);
+      }).catch(function(err) {
+          console.error(err);
+      });
+    }
+    console.log("Public profiles:", data)
+    console.log("Offline Public profiles:", appForage.getItem('profile'))
+    return data ? data : appForage.getItem('profile')
+}
+
+
+const getPublicProfilesX = async () => {
+  
+  try {
+    
+    
+    const user = supabase.auth.user()
+    const { data, error, status } = await supabase
+      .from("profiles")
+      .select("id, firstname, username, avatar_url, website, updated_at")
+      .eq('id', user.id)
+      .order("updated_at", { ascending: false })
+      .single();
+
+      console.log(status);
+
     if (error || !data) {
       throw error || new Error("No data");
+    }
+
+    if(data){
+      appForage.setItem('profile', data).then(function(value) {
+        // console.log(value);
+      }).catch(function(err) {
+          console.error(err);
+      });
     }
     console.log("Public profiles:", data)
     return data
     // setProfiles(data);
   } catch (error) {
     if (error instanceof Error) {
-      console.log("error", error.message);
+      console.log("error getPublicProfiles", error.message);
+    }else{
+      console.error(error.message);
     }
   }
 }
@@ -201,4 +256,4 @@ function isEmailAddress(em) {
   return em.match(pattern) ? true : false;    
 }
 
-export { supabase, signInAsync, signUpAsync, signOut, isEmailAddress, getTableAsync, getProfile, getPublicProfiles }
+export { supabase, signInAsync, signUpAsync, signOut, isEmailAddress, getProductsAsync, getProfile, getPublicProfiles }
