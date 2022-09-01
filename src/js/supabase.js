@@ -195,10 +195,10 @@ const getPublicProfiles = async () => {
       .from("profiles")
       .select("id, firstname, username, avatar_url, website, updated_at")
       .eq('id', user.id)
-      .order("updated_at", { ascending: false })
       .single();
 
-      console.log(status);
+    console.log(status);
+    console.error(error);
 
     if(data){
       avatarForage.setItem('profile', data).then(function(value) {
@@ -208,8 +208,8 @@ const getPublicProfiles = async () => {
       });
     }
     console.log("Public profiles:", data)
-    console.log("Offline Public profiles:", appForage.getItem('profile'))
-    return data ? data : appForage.getItem('profile')
+    console.log("Offline Public profiles:", avatarForage.getItem('profile'))
+    return data ? data : avatarForage.getItem('profile')
 }
 
 

@@ -96,15 +96,8 @@ var routes = [
           // Simulate Ajax Request
           getProductsAsync()
           .then((data) => {
-            app.progressbar.hide();
-            if (data==false) {
-              resolve(
-                {
-                  name: 'error',
-                  component: TabError
-                },
-              );
-            } else {
+            // app.progressbar.hide();
+            if (data) {
               resolve(
                 {
                   component: TabProducts
@@ -115,7 +108,16 @@ var routes = [
                   }
                 }
               );
+            } else {
+              resolve(
+                {
+                  name: 'error',
+                  component: TabError
+                },
+              );
             }
+          }).finally(()=>{
+            app.progressbar.hide()
           })
           
         },
@@ -135,10 +137,10 @@ var routes = [
       // Show Preloader
       app.progressbar.show('multi');
       // Simulate Ajax Request
-      getProfile()
+      getPublicProfiles()
       .then((data) => {
-        app.progressbar.hide();
-        if (data==false) {
+        // app.progressbar.hide();
+        if (!data) {
           reject();
         } else {
           // console.log(data);
@@ -153,6 +155,8 @@ var routes = [
             }
           );
         }
+      }).finally(()=>{
+        app.progressbar.hide()
       })
       
     },
@@ -229,7 +233,7 @@ var routes = [
       // Simulate Request
       getPublicProfiles()
       .then((data) => {
-        app.progressbar.hide();
+        // app.progressbar.hide();
         if (!data) {
           reject();
         } else {
@@ -245,9 +249,10 @@ var routes = [
             }
           );
         }
-      })
-      .catch((e) =>{
-        console.error(e);
+      }).catch((e) =>{
+        console.error(e)
+      }).finally(()=>{
+        app.progressbar.hide()
       })
 
     },

@@ -309,21 +309,23 @@
           });
 
           $f7.loginScreen.close('#root-login-screen', true)
-          $f7.progressbar.hide()
+          // $f7.progressbar.hide()
           $f7router.app.views.main.router.navigate('/', {
             reloadCurrent: true,
             ignoreCache: false,
           });
         }
         
-        $f7.progressbar.hide()
+        // $f7.progressbar.hide()
       }).catch((error)=>{
         // $f7router.app.views.main.router.navigate('/', {
           //   reloadCurrent: true,
           //   ignoreCache: false,
           // });
-        $f7.progressbar.hide()
         console.err(error);
+      }).finally(()=>{
+        $f7.progressbar.hide()
+
       })
     }
 
