@@ -36,6 +36,7 @@ export default defineConfig(({ command, mode }) => {
         assetFileNames: "[name].[ext]",
         // sourcemap: true,
         manualChunks: {
+          'cropperjs':['cropperjs'],
           // 'jquery':['jquery'],
           // 'jquery-i18next':['jquery-i18next'],
           // 'i18next':['i18next'],
