@@ -101,6 +101,7 @@
     changeStatus('Successs, Finished Loading!');
     $f7.progressbar.hide(progressBarEl);
     // console.log('Result:', result);
+
     avatarForage.setItem('img', result)
     .then(()=>{
       $f7router.navigate({
@@ -122,13 +123,13 @@
   const processFile = (file) => {
     const fr = new FileReader();
 
+    fr.readAsDataURL(file);
     fr.addEventListener('loadstart', changeStatus('Start Loading'));
     fr.addEventListener('load', changeStatus('Loaded'));
     fr.addEventListener('loadend', loaded);
     fr.addEventListener('progress', setProgress);
     fr.addEventListener('error', errorHandler);
     fr.addEventListener('abort', changeStatus('Interrupted'));
-    fr.readAsDataURL(file);
     
   }
 

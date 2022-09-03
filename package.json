@@ -26,6 +26,7 @@
   ],
   "dependencies": {
     "@supabase/supabase-js": "^1.35.6",
+    "base64-arraybuffer": "^1.0.2",
     "cropperjs": "^1.5.12",
     "dateformat": "^5.0.3",
     "dom7": "^4.0.4",

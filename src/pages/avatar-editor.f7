@@ -50,6 +50,7 @@ img {
 </style>
 <script>
 import { avatarForage } from '../js/localforage.js'
+import { updateAvatar } from '../js/supabase.js'
 import Cropper from 'cropperjs';
 export default function (props, { $, $f7, $f7route, $store, $on, $onMounted, $onBeforeUnmount, $onUnmounted }) {
     console.log($f7route.query.imageBlob)
@@ -110,8 +111,25 @@ export default function (props, { $, $f7, $f7route, $store, $on, $onMounted, $on
                             imageSmoothingEnabled: true,
                             imageSmoothingQuality: 'high',
                             }
-        let croppedImageDataURL = cropper.getCroppedCanvas(cropOptions).toDataURL('image/png'); 
-
+        let croppedImageDataURL = cropper.getCroppedCanvas(cropOptions).toDataURL(); 
+        
+        $f7.progressbar.show('multi')
+        cropper.getCroppedCanvas(cropOptions).toBlob((blob) => {
+            console.log(blob);
+            let file = new File([blob], "file.png",{type:"image/png"});
+            updateAvatar(file)
+            .then(()=>{
+                dynamicSheet.open();
+            })
+            .catch((error)=>{
+                console.error(error);
+            })
+            .finally(()=>{
+                $f7.progressbar.hide()
+            })              
+            
+        });
+        
         // console.log(croppedImageDataURL)
         let contentX = `
             <div class="sheet-modal my-sheet-swipe-to-step" style="height:auto; --f7-sheet-bg-color: #fff;">
@@ -210,47 +228,6 @@ export default function (props, { $, $f7, $f7route, $store, $on, $onMounted, $on
                 },
             }
         });
-
-        // Open dynamic sheet
-        dynamicSheet.open();
-
-
-        // cropper.getCroppedCanvas();
-
-        // cropper.getCroppedCanvas({
-        // width: 160,
-        // height: 90,
-        // minWidth: 256,
-        // minHeight: 256,
-        // maxWidth: 4096,
-        // maxHeight: 4096,
-        // fillColor: '#fff',
-        // imageSmoothingEnabled: false,
-        // imageSmoothingQuality: 'high',
-        // });
-
-        // // Upload cropped image to server if the browser supports `HTMLCanvasElement.toBlob`.
-        // // The default value for the second parameter of `toBlob` is 'image/png', change it if necessary.
-        // cropper.getCroppedCanvas().toBlob((blob) => {
-        // const formData = new FormData();
-
-        // // Pass the image file name as the third parameter if necessary.
-        // formData.append('croppedImage', blob/*, 'example.png' */);
-
-        // // Use `jQuery.ajax` method for example
-        // $.ajax('/path/to/upload', {
-        //     method: 'POST',
-        //     data: formData,
-        //     processData: false,
-        //     contentType: false,
-        //     success() {
-        //     console.log('Upload success');
-        //     },
-        //     error() {
-        //     console.log('Upload error');
-        //     },
-        // });
-        // }/*, 'image/png' */);
     }
     
     

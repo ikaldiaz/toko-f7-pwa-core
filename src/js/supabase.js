@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { decode } from 'base64-arraybuffer'
 import { appForage, avatarForage } from '../js/localforage';
 
 const options = {
@@ -212,6 +213,19 @@ const getPublicProfiles = async () => {
     return data ? data : avatarForage.getItem('profile')
 }
 
+const updateAvatar = async (File) => {
+  const user = supabase.auth.user()
+  const { data, error } = await supabase.storage
+  .from('avatars')
+  .upload(user.id+'/avatar.png', File, {
+    cacheControl: '3600',
+    upsert: false,
+  })
+  console.log(error);
+  console.log(data);
+}
+
+
 
 const getPublicProfilesX = async () => {
   
@@ -256,4 +270,4 @@ function isEmailAddress(em) {
   return em.match(pattern) ? true : false;    
 }
 
-export { supabase, signInAsync, signUpAsync, signOut, isEmailAddress, getProductsAsync, getProfile, getPublicProfiles }
+export { supabase, updateAvatar, signInAsync, signUpAsync, signOut, isEmailAddress, getProductsAsync, getProfile, getPublicProfiles }
